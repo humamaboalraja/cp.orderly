@@ -17,8 +17,8 @@ jobs:
           java-version: '17'
           distribution: 'corretto'
           cache: 'gradle'
-      - name: Run tests
-        run: ./gradlew test
+      - name: Run Spotless
+        run: ./gradlew spotlessCheck
   tests:
     needs: lint
     runs-on: ubuntu-latest
