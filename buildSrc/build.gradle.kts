@@ -50,3 +50,8 @@ dependencies {
 
     implementation("org.jacoco:org.jacoco.core:0.8.7")
 }
+
+tasks.register<JacocoReport>("codeCoverageReport") {
+    executionData(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
+    dependsOn(allprojects.map { it.tasks.named<Test>("test") })
+}
