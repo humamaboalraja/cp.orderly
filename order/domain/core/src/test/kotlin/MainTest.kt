@@ -5,5 +5,4 @@ class MainTest {
 
     @Test
     fun `main test`() = assertTrue(App.main() == "example")
-
 }
