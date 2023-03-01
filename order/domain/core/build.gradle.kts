@@ -1,4 +1,3 @@
 plugins {
-    id("spring-app-module-conventions")
-    id("kotlin-spock-conventions")
+    id("raw-logic-tests")
 }
