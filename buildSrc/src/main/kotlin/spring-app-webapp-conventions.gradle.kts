@@ -10,8 +10,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-actuator:$springBootVersion")
-
-    // implementation(project(":infrastructure:jackson"))
+    // implementation(project(":x:y"))
 }
 
 

@@ -8,6 +8,5 @@ plugins {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot:$springBootVersion")
-
-    // api(project(":core"))
+    // api(project(":x"))
 }

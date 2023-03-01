@@ -2,12 +2,11 @@
 val springBootVersion: String by project
 
 plugins {
-    id("kotlin-spock-conventions")
+    id("kotlin-tests-conventions")
     id("spring-conventions")
 }
 
 dependencies {
     implementation("org.springframework.boot:spring-boot:$springBootVersion")
-
-    // implementation(project(":infrastructure:restAssured"))
+    // implementation(project(":x:y"))
 }
