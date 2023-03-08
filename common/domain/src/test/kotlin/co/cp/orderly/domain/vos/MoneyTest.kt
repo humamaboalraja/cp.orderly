@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 
-class MoneyMock(value: BigDecimal)
+class MoneyMock(value: Int) : Money(BigDecimal(value))
 
 class MoneyTest {
 
@@ -124,5 +124,8 @@ class MoneyTest {
 
         val moneyWithMismatchingValue = Money(BigDecimal(12243))
         assertFalse(money == moneyWithMismatchingValue)
+
+        var moneyMock = MoneyMock(1234)
+        assertFalse(moneyMock == moneyWithMismatchingValue)
     }
 }
