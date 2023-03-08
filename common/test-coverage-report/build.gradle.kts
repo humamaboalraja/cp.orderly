@@ -25,7 +25,7 @@ tasks {
 
         )
         sourceSets(
-            project(":order:domain:core").sourceSets.getByName("main"),
+            project(":common:domain").sourceSets.getByName("main"),
         )
     }
 }
