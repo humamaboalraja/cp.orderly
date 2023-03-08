@@ -8,8 +8,8 @@ tasks {
             ":order:domain:application-service:test",
             ":order:domain:core:test"
         )
-        val domainApplicationService = file("../domain/application-service/build/test.exec")
-        val domainCore = file("../domain/core/build/test.exec")
+        val domainApplicationService = file("../domain/application-service/build/jacoco/test.exec")
+        val domainCore = file("../domain/core/build/jacoco/test.exec")
 
         executionData.setFrom(listOf(domainApplicationService, domainCore))
         sourceDirectories.setFrom(

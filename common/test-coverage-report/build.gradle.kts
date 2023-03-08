@@ -7,7 +7,7 @@ tasks {
         dependsOn(
             ":common:domain:test",
         )
-        val domainCommonUtils = file("../domain/build/test.exec")
+        val domainCommonUtils = file("../domain/build/jacoco/test.exec")
 
         executionData.setFrom(listOf(domainCommonUtils))
         sourceDirectories.setFrom(

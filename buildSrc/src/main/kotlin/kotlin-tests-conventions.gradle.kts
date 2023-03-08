@@ -1,5 +1,4 @@
 plugins {
-    groovy
     kotlin
     id("kotlin-conventions")
     id("jacoco")
