@@ -27,7 +27,7 @@ tasks {
         )
         additionalSourceDirs.setFrom(
             project(":order:domain:application-service").sourceSets.getByName("main").allSource +
-                project(":order:domain:application-service").sourceSets.getByName("main").allSource
+                project(":order:domain:core").sourceSets.getByName("main").allSource
 
         )
         sourceSets(

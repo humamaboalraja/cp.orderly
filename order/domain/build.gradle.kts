@@ -1,3 +1,3 @@
 plugins {
-    id("spring-app-module-conventions")
+    id("raw-logic-tests")
 }
