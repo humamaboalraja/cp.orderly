@@ -24,6 +24,9 @@ dependencyResolutionManagement {
 }
 
 include(
+    "common",
+    "common:domain",
+    "common:test-coverage-report",
     "order:domain:core",
     "order:domain:application-service",
     "order:application",
