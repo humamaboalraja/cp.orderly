@@ -50,7 +50,6 @@ class OrderItem private constructor(
         super.setId(orderItemId)
     }
 
-    // TODO - Document getAmountWithDecimals() and its constraints
     fun isPriceValid(): Boolean =
         when {
             product == null -> false

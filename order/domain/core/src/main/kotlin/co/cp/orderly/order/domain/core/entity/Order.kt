@@ -22,7 +22,7 @@ class Order private constructor(
     val items: List<OrderItem>?,
     var trackingId: TrackingId?,
     var orderStatus: OrderStatus?,
-    var failureMessages: MutableList<String>
+    var failureMessages: MutableList<String>?
 ) : AggregateRoot<OrderId>() {
 
     init { orderId?.let { super.setId(it) } }
@@ -37,7 +37,7 @@ class Order private constructor(
         var items: List<OrderItem>? = null,
         var trackingId: TrackingId? = null,
         var orderStatus: OrderStatus? = null,
-        var failureMessages: MutableList<String> = mutableListOf()
+        var failureMessages: MutableList<String>? = null
     ) {
         fun orderId(orderId: OrderId?) = apply { this.orderId = orderId }
         fun customerId(customerId: CustomerId?) = apply { this.customerId = customerId }
@@ -47,9 +47,7 @@ class Order private constructor(
         fun items(items: List<OrderItem>?) = apply { this.items = items }
         fun trackingId(trackingId: TrackingId?) = apply { this.trackingId = trackingId }
         fun orderStatus(orderStatus: OrderStatus?) = apply { this.orderStatus = orderStatus }
-        fun failureMessages(failureMessages: MutableList<String>?) = apply {
-            failureMessages?.let { this.failureMessages = failureMessages }
-        }
+        fun failureMessages(failureMessages: MutableList<String>?) = apply { this.failureMessages = failureMessages }
         fun build() = Order(
             orderId, customerId, shopId, deliveryAddress, price, items, trackingId, orderStatus, failureMessages
         )
@@ -83,7 +81,7 @@ class Order private constructor(
         operation = { orderStatus = OrderStatus.APPROVED }
     )
 
-    fun initCancel(failureMessages: MutableList<String>) = changeOrderState(
+    fun initCancel(failureMessages: MutableList<String>?) = changeOrderState(
         operationCondition = { orderStatus != OrderStatus.PAID },
         exceptionMessage = "Order is not in a valid state for an initCancel operation",
         operation = {
@@ -92,7 +90,7 @@ class Order private constructor(
         }
     )
 
-    fun cancel(failureMessages: MutableList<String>) = changeOrderState(
+    fun cancel(failureMessages: MutableList<String>?) = changeOrderState(
         operationCondition = { !(orderStatus == OrderStatus.PENDING || orderStatus == OrderStatus.CANCELLING) },
         exceptionMessage = "Order is not in a valid state for a cancel operation",
         operation = {
@@ -101,10 +99,10 @@ class Order private constructor(
         }
     )
 
-    private fun updateFailureMessages(failureMessages: MutableList<String>) {
+    private fun updateFailureMessages(failureMessages: MutableList<String>?) {
         when {
-            failureMessages != null && this.failureMessages != null ->
-                this.failureMessages?.addAll(failureMessages.filter { message -> message.isNotEmpty() }.toMutableList())
+            this.failureMessages != null && failureMessages != null ->
+                this.failureMessages?.addAll(failureMessages.filterNot { it.isEmpty() }.toMutableList())
             this.failureMessages == null -> this.failureMessages = failureMessages
         }
     }
@@ -115,28 +113,32 @@ class Order private constructor(
         validateItemsPrice()
     }
 
-    fun validateItemsPrice() = items?.map { orderItem ->
-        validateItemPrice(orderItem)
-        orderItem.subTotal
-    }?.fold(Money.ZERO_VALUE) {
-        acc, money ->
-        money?.addMoney(acc) ?: Money(BigDecimal(0))
-    }.also {
-        when {
-            price?.getAmount()?.toInt() != it?.getAmount()?.toInt() -> throw OrderDomainException(
-                "Total Price: ${price?.getAmount()} doesn't match the order items total price ${it?.getAmount()}"
-            )
-            else -> Unit
+    private fun validateItemsPrice() = items?.let { list ->
+        list.map { orderItem ->
+            validateItemPrice(orderItem)
+            orderItem.subTotal
+        }.fold(Money.ZERO_VALUE) { acc, money ->
+            if (money == null) return Money(BigDecimal(0))
+            money.addMoney(acc)
+        }.also {
+            when {
+                price == null -> Money(BigDecimal(0))
+                price.getAmount().toInt() != it.getAmount().toInt() -> throw OrderDomainException(
+                    "Total Price: ${price.getAmount()} doesn't match the order items total price ${it.getAmount()}"
+                )
+            }
         }
     }
 
-    private fun validateItemPrice(orderItem: OrderItem) = when {
-        !orderItem.isPriceValid() ->
-            throw OrderDomainException(
-                "Order item price: ${orderItem.price?.getAmount()} " +
-                    "is not valid for product: ${orderItem.product?.getId()?.getValue()}"
-            )
-        else -> Unit
+    private fun validateItemPrice(orderItem: OrderItem) {
+        when {
+            orderItem.price == null -> return
+            orderItem.product == null -> return
+            !orderItem.isPriceValid() ->
+                throw OrderDomainException(
+                    "Order item price: ${orderItem.price.getAmount()} is not valid for product: ${orderItem.product.getId()?.getValue()}"
+                )
+        }
     }
 
     private fun validateTotalPrice() = when {
