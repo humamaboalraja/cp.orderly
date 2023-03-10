@@ -5,12 +5,13 @@ plugins {
 
 }
 
-// sonarqube {
-//     properties {
-//         property("sonar.projectKey", "humamaboalraja_cp.orderly")
-//         property("sonar.organization", "humamaboalraja")
-//         property("sonar.host.url", "https://sonarcloud.io")
-//     }
-// }
+ sonarqube {
+     properties {
+         property("sonar.projectKey", "humamaboalraja_cp.orderly")
+         property("sonar.organization", "humamaboalraja")
+         property("sonar.host.url", "https://sonarcloud.io")
+         property("sonar.coverage.exclusions", "test-coverage-report")
+     }
+ }
 
 
