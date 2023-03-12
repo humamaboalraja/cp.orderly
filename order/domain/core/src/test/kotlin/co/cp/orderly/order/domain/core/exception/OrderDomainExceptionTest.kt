@@ -1,6 +1,5 @@
-package co.cp.orderly.domain.exception
+package co.cp.orderly.order.domain.core.exception
 
-import co.cp.orderly.order.domain.core.exception.OrderDomainException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
