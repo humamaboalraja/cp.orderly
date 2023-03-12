@@ -55,26 +55,11 @@ class OrderDomainServiceImpl : IOrderDomainService {
         }
     }
 
-//    private fun setOrderProductDataa(order: Order, shop: Shop) {
-//        if (order.items == null || shop.products == null) return
-//        order.items.forEach { orderItem ->
-//            shop.products.forEach { shopProduct ->
-//                when (val currentProduct = orderItem.product) {
-//                    shopProduct ->
-//                        currentProduct.updateWithVerifiedNameAndPrice(shopProduct.name, shopProduct.price)
-//                }
-//            }
-//        }
-//    }
-
-    // TODO - Clean up nullability checks
     private fun setOrderProductData(order: Order, shop: Shop) {
-        // if (order.items == null || shop.products == null) return
         val shopProductsMap = mutableMapOf<Product, Int>()
 
         var shopProductsMapValueIndex = 0
         order.items!!.forEach { element ->
-            // if (element.product == null) return
             shopProductsMap[element.product!!] = shopProductsMapValueIndex
             shopProductsMapValueIndex++
         }

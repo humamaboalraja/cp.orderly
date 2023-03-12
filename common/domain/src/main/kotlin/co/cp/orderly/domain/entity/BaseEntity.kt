@@ -14,7 +14,7 @@ abstract class BaseEntity<ID> {
         other as BaseEntity<*>
         return when {
             this === other -> true
-            javaClass != other?.javaClass -> false
+            javaClass != other.javaClass -> false
             id != other.id -> false
             else -> true
         }
