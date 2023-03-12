@@ -19,5 +19,23 @@ class ProductTest {
         assertEquals(product.name, "Fresh Bananas")
         assertEquals(product.price, Money(BigDecimal(23454)))
         assertEquals(product.toString(), "BaseEntity(id=BaseId(value=441c16fd-91de-4089-85c3-2ea388d319db))")
+
+        product.name = "Tomatoes"
+        product.price = Money(BigDecimal(24))
+        assertEquals(product.name, "Tomatoes")
+        assertEquals(product.price, Money(BigDecimal(24)))
+    }
+
+    @Test
+    fun `should update product entity with a verified name and price`() {
+        val product = Product(
+            ProductId(UUID.fromString("441c16fd-91de-4089-85c3-2ea388d319db")),
+            "Fresh Bananas",
+            Money(BigDecimal(23454))
+        )
+
+        product.updateWithVerifiedNameAndPrice("Apples", Money(BigDecimal(223454)))
+        assertEquals(product.name, "Apples")
+        assertEquals(product.price, Money(BigDecimal(223454)))
     }
 }

@@ -6,9 +6,14 @@ import co.cp.orderly.domain.vos.ProductId
 
 class Product(
     productId: ProductId,
-    val name: String,
-    val price: Money,
+    var name: String,
+    var price: Money,
 ) : BaseEntity<ProductId>() {
 
     init { super.setId(productId) }
+
+    fun updateWithVerifiedNameAndPrice(name: String, price: Money) = apply {
+        this.name = name
+        this.price = price
+    }
 }
