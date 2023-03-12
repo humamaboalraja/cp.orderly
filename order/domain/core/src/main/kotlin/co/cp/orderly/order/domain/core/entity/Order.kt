@@ -22,7 +22,7 @@ class Order private constructor(
     val items: List<OrderItem>?,
     var trackingId: TrackingId?,
     var orderStatus: OrderStatus?,
-    var failureMessages: MutableList<String>?
+    var errorMessages: MutableList<String>?
 ) : AggregateRoot<OrderId>() {
 
     init { orderId?.let { super.setId(it) } }
@@ -37,7 +37,7 @@ class Order private constructor(
         var items: List<OrderItem>? = null,
         var trackingId: TrackingId? = null,
         var orderStatus: OrderStatus? = null,
-        var failureMessages: MutableList<String>? = null
+        var errorMessages: MutableList<String>? = null
     ) {
         fun orderId(orderId: OrderId?) = apply { this.orderId = orderId }
         fun customerId(customerId: CustomerId?) = apply { this.customerId = customerId }
@@ -47,9 +47,9 @@ class Order private constructor(
         fun items(items: List<OrderItem>?) = apply { this.items = items }
         fun trackingId(trackingId: TrackingId?) = apply { this.trackingId = trackingId }
         fun orderStatus(orderStatus: OrderStatus?) = apply { this.orderStatus = orderStatus }
-        fun failureMessages(failureMessages: MutableList<String>?) = apply { this.failureMessages = failureMessages }
+        fun errorMessages(errorMessages: MutableList<String>?) = apply { this.errorMessages = errorMessages }
         fun build() = Order(
-            orderId, customerId, shopId, deliveryAddress, price, items, trackingId, orderStatus, failureMessages
+            orderId, customerId, shopId, deliveryAddress, price, items, trackingId, orderStatus, errorMessages
         )
     }
 
@@ -81,29 +81,29 @@ class Order private constructor(
         operation = { orderStatus = OrderStatus.APPROVED }
     )
 
-    fun initCancel(failureMessages: MutableList<String>?) = changeOrderState(
+    fun initCancel(errorMessages: MutableList<String>?) = changeOrderState(
         operationCondition = { orderStatus != OrderStatus.PAID },
         exceptionMessage = "Order is not in a valid state for an initCancel operation",
         operation = {
             orderStatus = OrderStatus.CANCELLING
-            updateFailureMessages(failureMessages)
+            updateErrorMessages(errorMessages)
         }
     )
 
-    fun cancel(failureMessages: MutableList<String>?) = changeOrderState(
+    fun cancel(errorMessages: MutableList<String>?) = changeOrderState(
         operationCondition = { !(orderStatus == OrderStatus.PENDING || orderStatus == OrderStatus.CANCELLING) },
         exceptionMessage = "Order is not in a valid state for a cancel operation",
         operation = {
             orderStatus = OrderStatus.CANCELED
-            updateFailureMessages(failureMessages)
+            updateErrorMessages(errorMessages)
         }
     )
 
-    private fun updateFailureMessages(failureMessages: MutableList<String>?) {
+    private fun updateErrorMessages(errorMessages: MutableList<String>?) {
         when {
-            this.failureMessages != null && failureMessages != null ->
-                this.failureMessages?.addAll(failureMessages.filterNot { it.isEmpty() }.toMutableList())
-            this.failureMessages == null -> this.failureMessages = failureMessages
+            this.errorMessages != null && errorMessages != null ->
+                this.errorMessages?.addAll(errorMessages.filterNot { it.isEmpty() }.toMutableList())
+            this.errorMessages == null -> this.errorMessages = errorMessages
         }
     }
 
@@ -169,5 +169,5 @@ class Order private constructor(
             "items=$items, \n" +
             "trackingId=$trackingId, \n" +
             "orderStatus=$orderStatus, \n" +
-            "failureMessages=$failureMessages)"
+            "errorMessages=$errorMessages)"
 }

@@ -20,7 +20,7 @@ import java.util.UUID
 
 class OrderTest {
 
-    private val order = Order.builder()
+    val order = Order.builder()
         .orderId(OrderId(UUID.randomUUID()))
         .customerId(CustomerId(UUID.randomUUID()))
         .shopId(ShopId(UUID.randomUUID()))
@@ -61,7 +61,7 @@ class OrderTest {
         )
         .trackingId(TrackingId(UUID.randomUUID()))
         .orderStatus(OrderStatus.PENDING)
-        .failureMessages(mutableListOf("sfgdfg", "rwagsdfdg", "fsgdfd"))
+        .errorMessages(mutableListOf("sfgdfg", "rwagsdfdg", "fsgdfd"))
         .build()
 
     private val orderFourth = Order.builder()
@@ -103,7 +103,7 @@ class OrderTest {
             )
         )
         .trackingId(TrackingId(UUID.randomUUID()))
-        .failureMessages(mutableListOf("sfgdfg", "rwagsdfdg", "fsgdfd"))
+        .errorMessages(mutableListOf("sfgdfg", "rwagsdfdg", "fsgdfd"))
 
     @Test
     fun `should build an Order using Order's builder then check Order's properties state validity `() {
@@ -171,33 +171,33 @@ class OrderTest {
         orderBuilder.trackingId = TrackingId(UUID.fromString("ac1d36e8-fef4-4d19-8881-d3c12c4a73bd"))
         assertEquals(orderBuilder.trackingId, TrackingId(UUID.fromString("ac1d36e8-fef4-4d19-8881-d3c12c4a73bd")))
 
-        orderBuilder.failureMessages = mutableListOf("Exception #1", "Exception #1")
-        assertEquals(orderBuilder.failureMessages, mutableListOf("Exception #1", "Exception #1"))
+        orderBuilder.errorMessages = mutableListOf("Exception #1", "Exception #1")
+        assertEquals(orderBuilder.errorMessages, mutableListOf("Exception #1", "Exception #1"))
 
         orderFourth.orderStatus(OrderStatus.PENDING).build().cancel(null)
         assertEquals(
-            orderFourth.failureMessages,
+            orderFourth.errorMessages,
             mutableListOf("sfgdfg", "rwagsdfdg", "fsgdfd")
         )
 
-        var orderMessages = Order.builder().orderStatus(OrderStatus.PAID).failureMessages(null)
+        var orderMessages = Order.builder().orderStatus(OrderStatus.PAID).errorMessages(null)
         orderMessages.build().initCancel(mutableListOf("Exception #1", "Exception #1"))
         assertEquals(
-            orderMessages.failureMessages,
+            orderMessages.errorMessages,
             null
         )
 
-        orderMessages = Order.builder().orderStatus(OrderStatus.PENDING).failureMessages(mutableListOf("s"))
+        orderMessages = Order.builder().orderStatus(OrderStatus.PENDING).errorMessages(mutableListOf("s"))
         orderMessages.build().cancel(mutableListOf("Exception #1", "Exception #1"))
         assertEquals(
-            orderMessages.failureMessages,
+            orderMessages.errorMessages,
             mutableListOf("s", "Exception #1", "Exception #1")
         )
 
-        orderMessages = Order.builder().orderStatus(OrderStatus.PENDING).failureMessages(mutableListOf("Exception #1", "Exception #2"))
+        orderMessages = Order.builder().orderStatus(OrderStatus.PENDING).errorMessages(mutableListOf("Exception #1", "Exception #2"))
         orderMessages.build().cancel(mutableListOf("Exception #3", "Exception #4"))
         assertEquals(
-            orderMessages.failureMessages,
+            orderMessages.errorMessages,
             mutableListOf("Exception #1", "Exception #2", "Exception #3", "Exception #4")
         )
 
@@ -238,8 +238,8 @@ class OrderTest {
         order.orderStatus = OrderStatus.PENDING
         assertEquals(order.orderStatus, OrderStatus.PENDING)
 
-        order.failureMessages = mutableListOf("Exception #1", "Exception #2", "Exception #2")
-        assertEquals(order.failureMessages, mutableListOf("Exception #1", "Exception #2", "Exception #2"))
+        order.errorMessages = mutableListOf("Exception #1", "Exception #2", "Exception #2")
+        assertEquals(order.errorMessages, mutableListOf("Exception #1", "Exception #2", "Exception #2"))
     }
 
     @Test
@@ -267,13 +267,13 @@ class OrderTest {
     }
 
     @Test
-    fun `should change the orderStatus using initCancel(failureMessages) order state machine method`() {
+    fun `should change the orderStatus using initCancel(errorMessages) order state machine method`() {
         order.orderStatus = OrderStatus.PAID
-        order.failureMessages?.let { order.initCancel(it) }
+        order.errorMessages?.let { order.initCancel(it) }
         assertEquals(order.orderStatus, OrderStatus.CANCELLING)
         order.orderStatus = OrderStatus.APPROVED
         val initCancelStateExceptionResult = assertThrows<OrderDomainException> {
-            order.failureMessages?.let { order.initCancel(it) }
+            order.errorMessages?.let { order.initCancel(it) }
         }
         assertEquals(
             initCancelStateExceptionResult.message,
@@ -282,16 +282,16 @@ class OrderTest {
     }
 
     @Test
-    fun `should change the orderStatus using cancel(failureMessages) order state machine method`() {
+    fun `should change the orderStatus using cancel(errorMessages) order state machine method`() {
         order.orderStatus = OrderStatus.CANCELLING
-        order.failureMessages?.let { order.cancel(it) }
+        order.errorMessages?.let { order.cancel(it) }
         assertEquals(order.orderStatus, OrderStatus.CANCELED)
         order.orderStatus = OrderStatus.PENDING
-        order.failureMessages?.let { order.cancel(it) }
+        order.errorMessages?.let { order.cancel(it) }
         assertEquals(order.orderStatus, OrderStatus.CANCELED)
         order.orderStatus = OrderStatus.APPROVED
         val cancelStateExceptionResult = assertThrows<OrderDomainException> {
-            order.failureMessages?.let { order.cancel(it) }
+            order.errorMessages?.let { order.cancel(it) }
         }
         assertEquals(cancelStateExceptionResult.message, "Order is not in a valid state for a cancel operation")
     }
@@ -412,7 +412,7 @@ class OrderTest {
     fun `Should call order's toString() method and verify its returned value`() {
         assertTrue(!order.toString().isNullOrEmpty() && order.toString().startsWith("Order", true))
         listOf(
-            "failureMessages", "orderId", "customerId", "shopId", "price", "items", "orderStatus", "failureMessages"
+            "errorMessages", "orderId", "customerId", "shopId", "price", "items", "orderStatus"
         ).forEach {
             assertTrue(order.toString().contains(it))
         }
