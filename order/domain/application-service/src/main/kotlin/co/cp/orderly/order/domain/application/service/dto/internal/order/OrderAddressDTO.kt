@@ -1,4 +1,4 @@
-package co.cp.orderly.order.domain.application.service.dto.create
+package co.cp.orderly.order.domain.application.service.dto.internal.order
 
 import javax.validation.constraints.Max
 import javax.validation.constraints.NotNull
