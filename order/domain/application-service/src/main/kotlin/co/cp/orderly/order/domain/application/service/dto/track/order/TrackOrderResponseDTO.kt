@@ -1,4 +1,4 @@
-package co.cp.orderly.order.domain.application.service.dto.track
+package co.cp.orderly.order.domain.application.service.dto.track.order
 
 import co.cp.orderly.domain.vos.OrderStatus
 import java.util.UUID

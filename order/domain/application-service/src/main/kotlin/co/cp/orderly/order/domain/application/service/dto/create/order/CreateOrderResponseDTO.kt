@@ -1,4 +1,4 @@
-package co.cp.orderly.order.domain.application.service.dto.create
+package co.cp.orderly.order.domain.application.service.dto.create.order
 
 import co.cp.orderly.domain.vos.OrderStatus
 import java.util.UUID

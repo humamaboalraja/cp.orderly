@@ -1,4 +1,4 @@
-package co.cp.orderly.order.domain.application.service.dto.message
+package co.cp.orderly.order.domain.application.service.dto.message.payment
 
 import co.cp.orderly.domain.vos.PaymentStatus
 import java.time.Instant

@@ -1,4 +1,4 @@
-package co.cp.orderly.order.domain.application.service.dto.message
+package co.cp.orderly.order.domain.application.service.dto.message.shop
 
 import co.cp.orderly.domain.vos.OrderApprovalStatus
 import java.time.Instant
