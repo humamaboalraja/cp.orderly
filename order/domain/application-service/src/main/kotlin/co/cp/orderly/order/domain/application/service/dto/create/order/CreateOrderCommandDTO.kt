@@ -8,13 +8,13 @@ import javax.validation.constraints.NotNull
 
 data class CreateOrderCommandDTO(
     @NotNull
-    private val customerId: UUID,
+    val customerId: UUID,
     @NotNull
-    private val shopId: UUID?,
+    val shopId: UUID?,
     @NotNull
-    private val price: BigDecimal?,
+    val price: BigDecimal?,
     @NotNull
-    private val items: List<OrderItemDTO>?,
+    val items: List<OrderItemDTO>?,
     @NotNull
-    private val orderAddress: OrderAddressDTO?
+    val orderAddress: OrderAddressDTO?
 )

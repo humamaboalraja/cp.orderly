@@ -6,10 +6,10 @@ import javax.validation.constraints.NotNull
 
 data class TrackOrderQueryDTO(
     @NotNull
-    private val orderTrackingId: UUID,
+    val orderTrackingId: UUID,
     @NotNull
-    private val shopId: UUID?,
+    val shopId: UUID?,
     @NotNull
-    private val price: BigDecimal?,
+    val price: BigDecimal?,
 
 )
