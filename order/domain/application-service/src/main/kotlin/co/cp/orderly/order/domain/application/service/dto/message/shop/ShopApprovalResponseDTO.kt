@@ -6,18 +6,18 @@ import javax.validation.constraints.NotNull
 
 data class ShopApprovalResponseDTO(
     @NotNull
-    private val id: String,
+    val id: String,
     @NotNull
-    private val sagaId: String,
+    val sagaId: String,
     @NotNull
-    private val orderId: String,
+    val orderId: String,
     @NotNull
-    private val shopId: String,
+    val shopId: String,
     @NotNull
-    private val createdAt: Instant,
+    val createdAt: Instant,
     @NotNull
-    private val orderApprovalStatus: OrderApprovalStatus,
+    val orderApprovalStatus: OrderApprovalStatus,
     @NotNull
-    private val errorMessages: MutableList<String>,
+    val errorMessages: MutableList<String>,
 
 )

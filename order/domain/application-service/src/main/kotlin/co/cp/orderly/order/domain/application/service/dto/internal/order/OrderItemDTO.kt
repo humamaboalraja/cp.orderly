@@ -6,12 +6,12 @@ import javax.validation.constraints.NotNull
 
 data class OrderItemDTO(
     @NotNull
-    private val productId: UUID,
+    val productId: UUID,
     @NotNull
-    private val quantity: Int,
+    val quantity: Int,
     @NotNull
-    private val price: BigDecimal,
+    val price: BigDecimal,
     @NotNull
-    private val subTotal: BigDecimal
+    val subTotal: BigDecimal
 
 )

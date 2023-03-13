@@ -6,9 +6,9 @@ import javax.validation.constraints.NotNull
 
 data class CreateOrderResponseDTO(
     @NotNull
-    private val orderTrackingId: UUID?,
+    val orderTrackingId: UUID?,
     @NotNull
-    private val orderStatus: OrderStatus?,
+    val orderStatus: OrderStatus?,
     @NotNull
-    private val message: String?,
+    val message: String?,
 )
