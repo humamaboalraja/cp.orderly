@@ -29,9 +29,6 @@ class ProductTest {
         val productSecond = Product(ProductId(UUID.fromString("441c16fd-91de-4089-85c3-2ea388d319db")))
         assertNull(productSecond.name)
         assertNull(productSecond.price)
-
-
-
     }
 
     @Test

@@ -1,6 +1,5 @@
 package co.cp.orderly.domain.vos
 
-import co.cp.orderly.domain.vos.PaymentStatus
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
