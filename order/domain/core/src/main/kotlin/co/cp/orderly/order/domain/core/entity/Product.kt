@@ -6,8 +6,8 @@ import co.cp.orderly.domain.vos.ProductId
 
 class Product(
     productId: ProductId,
-    var name: String,
-    var price: Money,
+    var name: String? = null,
+    var price: Money? = null,
 ) : BaseEntity<ProductId>() {
 
     init { super.setId(productId) }
