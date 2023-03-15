@@ -10,11 +10,11 @@ data class CreateOrderCommandDTO(
     @NotNull
     val customerId: UUID,
     @NotNull
-    val shopId: UUID?,
+    val shopId: UUID,
     @NotNull
-    val price: BigDecimal?,
+    val price: BigDecimal,
     @NotNull
-    val items: List<OrderItemDTO>?,
+    val items: List<OrderItemDTO>,
     @NotNull
-    val orderAddress: OrderAddressDTO?
+    val orderAddress: OrderAddressDTO
 )

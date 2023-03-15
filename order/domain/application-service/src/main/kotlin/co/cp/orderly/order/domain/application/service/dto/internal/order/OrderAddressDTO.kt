@@ -5,10 +5,10 @@ import javax.validation.constraints.NotNull
 
 data class OrderAddressDTO(
     @NotNull
-    val streetName: String?,
+    val streetName: String,
     @NotNull
     @Max(value = 10)
-    val postalCode: String?,
+    val postalCode: String,
     @NotNull
     @Max(value = 85)
     val city: String,

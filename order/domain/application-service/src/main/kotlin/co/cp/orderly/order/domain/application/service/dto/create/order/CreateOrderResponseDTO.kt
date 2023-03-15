@@ -9,6 +9,5 @@ data class CreateOrderResponseDTO(
     val orderTrackingId: UUID?,
     @NotNull
     val orderStatus: OrderStatus?,
-    @NotNull
-    val message: String?,
+    val message: String? = null,
 )
