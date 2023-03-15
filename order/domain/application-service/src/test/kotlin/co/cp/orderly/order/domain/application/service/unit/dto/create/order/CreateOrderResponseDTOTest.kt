@@ -13,11 +13,17 @@ class CreateOrderResponseDTOTest {
         "Order has been successfully created"
     )
 
+    private val orderResponseDTO2nd = CreateOrderResponseDTO(
+        UUID.fromString("400f119c-79dc-4344-946a-761525ab0b38"),
+        OrderStatus.PENDING,
+    )
+
     @Test
     fun `should construct CreateOrderResponseDTOTest and check its data properties`() {
         Assertions.assertNotNull(orderResponseDTO.orderTrackingId)
         Assertions.assertNotNull(orderResponseDTO.orderStatus)
         Assertions.assertNotNull(orderResponseDTO.message)
+        Assertions.assertNull(orderResponseDTO2nd.message)
     }
 
     @Test
