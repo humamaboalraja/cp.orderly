@@ -7,9 +7,9 @@ import co.cp.orderly.order.domain.application.service.utils.dataMapper.OrderData
 import co.cp.orderly.order.domain.core.entity.Order
 import co.cp.orderly.order.domain.core.exception.OrderNotFoundException
 import co.cp.orderly.order.domain.core.vos.TrackingId
-import org.jboss.logging.Logger
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
+import java.util.logging.Logger
 
 @Component
 open class OrderTrackCommand(
@@ -18,14 +18,14 @@ open class OrderTrackCommand(
 
 ) {
 
-    private val logger = Logger.getLogger(OrderCreateCommand::class.java)
+    private val logger = Logger.getLogger(OrderTrackCommand::class.java.name)
 
     @Transactional(readOnly = true)
     open fun trackOrder(trackOrderQueryDTO: TrackOrderQueryDTO): TrackOrderResponseDTO? {
         val order: Order? = OrderRepository.findByTrackingId(TrackingId(trackOrderQueryDTO.orderTrackingId))
         when (order) {
             null -> {
-                logger.warn("Couldn't find Order #${trackOrderQueryDTO.orderTrackingId}")
+                logger.warning("Couldn't find Order #${trackOrderQueryDTO.orderTrackingId}")
                 throw OrderNotFoundException("Couldn't find Order #${trackOrderQueryDTO.orderTrackingId}")
             }
         }

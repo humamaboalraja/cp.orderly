@@ -16,6 +16,7 @@ class CreateOrderResponseDTOTest {
     private val orderResponseDTO2nd = CreateOrderResponseDTO(
         UUID.fromString("400f119c-79dc-4344-946a-761525ab0b38"),
         OrderStatus.PENDING,
+        null
     )
 
     @Test
