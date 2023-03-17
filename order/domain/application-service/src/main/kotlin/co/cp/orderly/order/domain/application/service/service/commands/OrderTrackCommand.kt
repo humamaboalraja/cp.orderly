@@ -14,7 +14,7 @@ import java.util.logging.Logger
 @Component
 open class OrderTrackCommand(
     private val orderDataMapper: OrderDataMapper,
-    private val OrderRepository: OrderRepository
+    private val orderRepository: OrderRepository
 
 ) {
 
@@ -22,7 +22,7 @@ open class OrderTrackCommand(
 
     @Transactional(readOnly = true)
     open fun trackOrder(trackOrderQueryDTO: TrackOrderQueryDTO): TrackOrderResponseDTO? {
-        val order: Order? = OrderRepository.findByTrackingId(TrackingId(trackOrderQueryDTO.orderTrackingId))
+        val order: Order? = orderRepository.findByTrackingId(TrackingId(trackOrderQueryDTO.orderTrackingId))
         when (order) {
             null -> {
                 logger.warning("Couldn't find Order #${trackOrderQueryDTO.orderTrackingId}")
