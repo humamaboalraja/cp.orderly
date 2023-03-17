@@ -11,7 +11,7 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.logging.Logger
 
-class OrderDomainServiceImpl : IOrderDomainService {
+open class OrderDomainServiceImpl : IOrderDomainService {
 
     companion object { private val logger = Logger.getLogger(OrderDomainServiceImpl::class.java.name) }
     private val utcZonedDateTime = ZonedDateTime.now(ZoneId.of("UTC"))
@@ -67,7 +67,7 @@ class OrderDomainServiceImpl : IOrderDomainService {
         shop.products!!.forEach { product ->
             when {
                 shopProductsMap.containsKey(product) ->
-                    order.items!![shopProductsMap[product]!!].product!!.updateWithVerifiedNameAndPrice(
+                    order.items[shopProductsMap[product]!!].product!!.updateWithVerifiedNameAndPrice(
                         product.name!!, product.price!!
                     )
             }
