@@ -10,7 +10,8 @@ import co.cp.orderly.order.domain.core.exception.OrderDomainException
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.logging.Logger
-class OrderDomainServiceImpl : IOrderDomainService {
+
+open class OrderDomainServiceImpl : IOrderDomainService {
 
     companion object { private val logger = Logger.getLogger(OrderDomainServiceImpl::class.java.name) }
     private val utcZonedDateTime = ZonedDateTime.now(ZoneId.of("UTC"))
@@ -21,14 +22,14 @@ class OrderDomainServiceImpl : IOrderDomainService {
         order.validateOrder()
         order.startNewtOrder()
 
-        logger.info("Order with id ${order.getId()!!.getValue()} is initiated")
+        logger.info("Order #${order.getId()!!.getValue()} is initiated")
 
         return OrderCreatedEvent(order, utcZonedDateTime)
     }
 
     override fun payOrder(order: Order): OrderPaidEvent {
         order.pay()
-        logger.info { "Order with id ${order.getId()!!.getValue()} is paid" }
+        logger.info { "Order #${order.getId()!!.getValue()} is paid" }
         return OrderPaidEvent(order, utcZonedDateTime)
     }
 
@@ -39,7 +40,7 @@ class OrderDomainServiceImpl : IOrderDomainService {
 
     override fun cancelOrderPayment(order: Order, errorMessages: MutableList<String>): OrderCancelledEvent {
         order.initCancel(errorMessages)
-        logger.info { "Order payment for order id #${order.getId()!!.getValue()} is cancelling " }
+        logger.info { "Order payment for Order #${order.getId()!!.getValue()} is cancelling " }
         return OrderCancelledEvent(order, utcZonedDateTime)
     }
 
@@ -66,8 +67,8 @@ class OrderDomainServiceImpl : IOrderDomainService {
         shop.products!!.forEach { product ->
             when {
                 shopProductsMap.containsKey(product) ->
-                    order.items!![shopProductsMap[product]!!].product!!.updateWithVerifiedNameAndPrice(
-                        product.name, product.price
+                    order.items[shopProductsMap[product]!!].product!!.updateWithVerifiedNameAndPrice(
+                        product.name!!, product.price!!
                     )
             }
         }

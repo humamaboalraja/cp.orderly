@@ -9,7 +9,7 @@ class OrderItem private constructor(
     val orderItemId: OrderItemId?,
     private var orderId: OrderId?,
     val product: Product?,
-    private val quantity: Int?,
+    val quantity: Int?,
     val price: Money?,
     val subTotal: Money?
 ) : BaseEntity<OrderItemId>() {

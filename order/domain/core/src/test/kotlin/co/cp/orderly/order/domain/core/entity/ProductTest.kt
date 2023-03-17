@@ -3,6 +3,7 @@ package co.cp.orderly.order.domain.core.entity
 import co.cp.orderly.domain.vos.Money
 import co.cp.orderly.domain.vos.ProductId
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.util.UUID
@@ -24,6 +25,10 @@ class ProductTest {
         product.price = Money(BigDecimal(24))
         assertEquals(product.name, "Tomatoes")
         assertEquals(product.price, Money(BigDecimal(24)))
+
+        val productSecond = Product(ProductId(UUID.fromString("441c16fd-91de-4089-85c3-2ea388d319db")))
+        assertNull(productSecond.name)
+        assertNull(productSecond.price)
     }
 
     @Test
