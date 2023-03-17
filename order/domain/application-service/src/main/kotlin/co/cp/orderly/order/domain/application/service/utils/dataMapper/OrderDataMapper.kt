@@ -24,7 +24,7 @@ class OrderDataMapper {
             .shopId(ShopId(createOrderCommandDTO.shopId))
             .products(
                 createOrderCommandDTO.items.map {
-                    Product(ProductId(it.productId))
+                    Product(ProductId(it.productId), price = it.price)
                 }
             )
             .build()
@@ -33,23 +33,23 @@ class OrderDataMapper {
         Order.builder()
             .customerId(CustomerId(createOrderCommandDTO.customerId))
             .shopId(ShopId(createOrderCommandDTO.shopId))
-            .items(orderItemsToOrderItemEntity(createOrderCommandDTO.items))
+            .items(orderItemsToOrderItemEntities(createOrderCommandDTO.items))
             .price(Money(createOrderCommandDTO.price))
             .deliveryAddress(orderAddressToStreetAddress(createOrderCommandDTO.orderAddress))
             .build()
 
-    fun orderToCreateOrderResponse(order: Order): CreateOrderResponseDTO =
-        CreateOrderResponseDTO(order.getId()?.getValue(), order.orderStatus)
+    fun orderToCreateOrderResponse(order: Order, message: String): CreateOrderResponseDTO =
+        CreateOrderResponseDTO(order.getId()?.getValue(), order.orderStatus, message)
 
-    private fun orderItemsToOrderItemEntity(items: List<OrderItemDTO>): List<OrderItem>? =
+    private fun orderItemsToOrderItemEntities(items: List<OrderItemDTO>): List<OrderItem> =
         items.map { orderItemDTO ->
             OrderItem.builder()
-                .product(Product(ProductId(orderItemDTO.productId)))
+                .product(Product(ProductId(orderItemDTO.productId), orderItemDTO.price))
                 .price(Money(orderItemDTO.price))
                 .quantity(orderItemDTO.quantity)
                 .subTotal(Money(orderItemDTO.subTotal))
                 .build()
-        }
+        }.toList()
 
     private fun orderAddressToStreetAddress(orderAddressDTO: OrderAddressDTO): StreetAddress =
         StreetAddress(UUID.randomUUID(), orderAddressDTO.streetName, orderAddressDTO.postalCode, orderAddressDTO.city)
