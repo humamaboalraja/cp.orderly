@@ -37,3 +37,6 @@ out/
 
 # MacOS generated files
 .DS_Store
+
+# Docker
+volumes
