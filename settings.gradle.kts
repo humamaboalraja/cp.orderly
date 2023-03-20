@@ -27,11 +27,14 @@ include(
     "common",
     "common:domain",
     "common:test-coverage-report",
+
     "order:domain:core",
     "order:domain:application-service",
     "order:application",
     "order:data",
     "order:messaging",
     "order:main",
-    "order:test-coverage-report"
+    "order:test-coverage-report",
+
+    "infrastructure"
 )
