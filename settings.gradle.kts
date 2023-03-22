@@ -36,5 +36,10 @@ include(
     "order:main",
     "order:test-coverage-report",
 
-    "infrastructure"
+    "infrastructure",
+    "infrastructure:kafka",
+    "infrastructure:kafka:consumer",
+    "infrastructure:kafka:model",
+    "infrastructure:kafka:producer",
+    "infrastructure:kafka:config",
 )
