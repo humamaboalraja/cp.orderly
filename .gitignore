@@ -40,3 +40,6 @@ out/
 
 # Docker
 volumes
+
+# Kafka's Avro schema files
+avro
