@@ -42,4 +42,5 @@ include(
     "infrastructure:kafka:model",
     "infrastructure:kafka:producer",
     "infrastructure:kafka:config",
+    "infrastructure:test-coverage-report",
 )
