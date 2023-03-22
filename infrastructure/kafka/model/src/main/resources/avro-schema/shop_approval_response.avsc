@@ -1,0 +1,35 @@
+{
+    "namespace": "co.cp.orderly.kafka.model.avro",
+    "type": "record",
+    "name": "ShopApprovalResponseAvroModel",
+    "fields": [
+        {
+            "name": "id",
+            "type": { "type": "string"}
+        },
+        {
+            "name": "sagaId",
+            "type": { "type": "string"}
+        },
+        {
+            "name": "ShopId",
+            "type": { "type": "string"}
+        },
+        {
+            "name": "orderId",
+            "type": { "type": "string" }
+        },
+        {
+            "name": "createdAt",
+            "type": { "type": "long",  "logicalType": "timestamp-millis" }
+        },
+        {
+            "name": "orderApprovalStatus",
+            "type": { "type": "enum",  "name": "OrderApprovalStatus", "symbols": ["APPROVED", "REJECTED"] }
+        },
+        {
+            "name": "errorMessages",
+            "type": {"type": "array", "items":{ "type":"string" }}
+        }
+    ]
+}

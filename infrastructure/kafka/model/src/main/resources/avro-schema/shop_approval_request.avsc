@@ -1,0 +1,46 @@
+{
+    "namespace": "co.cp.orderly.kafka.model.avro",
+    "type": "record",
+    "name": "ShopApprovalRequestAvroModel",
+    "fields": [
+        {
+            "name": "id",
+            "type": { "type": "string" }
+        },
+        {
+            "name": "sagaId",
+            "type": { "type": "string" }
+        },
+        {
+            "name": "shopId",
+            "type": { "type": "string" }
+        },
+        {
+            "name": "orderId",
+            "type": { "type": "string" }
+        },
+        {
+            "name": "shopOrderStatus",
+            "type": {"type": "enum", "name": "ShopOrderStatus", "symbols": ["PAID"]}
+        },
+        {
+            "name": "products",
+            "type": {
+                "type": "array",
+                "items":{
+                  "name":"Product",
+                  "type":"record",
+                  "fields":[{"name":"id", "type": "string", "logicalType": "uuid"}, {"name":"quantity", "type": "int"}]
+               }
+            }
+        },
+        {
+            "name": "price",
+            "type": {"type": "bytes", "logicalType": "decimal", "precision": 10, "scale": 2 }
+        },
+        {
+            "name": "createdAt",
+            "type": {"type": "long", "logicalType": "timestamp-millis" }
+        }
+    ]
+}
