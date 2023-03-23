@@ -8,8 +8,8 @@ data class TrackOrderQueryDTO(
     @NotNull
     val orderTrackingId: UUID,
     @NotNull
-    val shopId: UUID,
+    val shopId: UUID? = null,
     @NotNull
-    val price: BigDecimal,
+    val price: BigDecimal? = null,
 
 )
