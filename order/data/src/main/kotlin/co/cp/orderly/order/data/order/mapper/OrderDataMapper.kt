@@ -55,7 +55,7 @@ class OrderDataMapper {
     private fun orderItemEntitiesToOrderItems(items: List<OrderItemEntity>) =
         items.map {
             OrderItem.builder()
-                .orderItemId(OrderItemId(it.id!!))
+                .orderItemId(OrderItemId(it.orderItemId!!))
                 .product(Product(ProductId(it.productId!!)))
                 .quantity(it.quantity)
                 .price(Money(it.price!!))
@@ -63,12 +63,12 @@ class OrderDataMapper {
         }.toList()
 
     private fun addressEntityToDeliveryAddress(address: OrderAddressEntity?) =
-        StreetAddress(address?.id!!, address.street!!, address.postalCode!!, address.city!!)
+        StreetAddress(address?.orderAddressId!!, address.street!!, address.postalCode!!, address.city!!)
 
     private fun orderItemsToOrderItemEntities(items: List<OrderItem>?): List<OrderItemEntity>? =
         items?.map {
             OrderItemEntity(
-                it.getId()?.getValue(),
+                it.orderItemId?.getValue(),
                 productId = it.product?.getId()?.getValue(),
                 quantity = it.quantity,
                 price = it.price?.getAmount(),

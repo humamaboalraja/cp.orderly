@@ -11,25 +11,22 @@ import java.math.BigDecimal
 import java.util.Objects
 import java.util.UUID
 
-@Entity
 @IdClass(OrderItemEntityId::class)
 @Table(name = "order_items")
+@Entity
 open class OrderItemEntity(
     @Id
-    open var orderItemId: Long?,
+    open var orderItemId: Long? = null,
 
     @Id
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "ORDER_ID")
-    open var order: OrderEntity?,
-
-    open var productId: UUID?,
-    open var price: BigDecimal?,
-    open var quantity: Int?,
-    open var subTotal: BigDecimal?
+    open var order: OrderEntity? = null,
+    open var productId: UUID? = null,
+    open var price: BigDecimal? = null,
+    open var quantity: Int? = null,
+    open var subTotal: BigDecimal? = null
 ) {
-
-    constructor() : this(null, null, null, null, null, null)
     override fun equals(other: Any?): Boolean {
         other as OrderItemEntity
         return when {

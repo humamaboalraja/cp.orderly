@@ -8,5 +8,5 @@ import org.springframework.stereotype.Component
 @Component
 class CustomerDataMapper {
     fun customerEntityToCustomer(customerEntity: CustomerEntity): Customer =
-        Customer(CustomerId(customerEntity.id!!))
+        Customer(CustomerId(customerEntity.customerId!!))
 }
