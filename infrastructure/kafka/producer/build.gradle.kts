@@ -17,7 +17,6 @@ dependencies {
     api(project(":infrastructure:kafka:config"))
     api(project(":infrastructure:kafka:model"))
     api(project(":order:domain:core"))
-    api(project(":order:domain:core"))
     api(project(":common:domain"))
     implementation("org.springframework.kafka:spring-kafka:$springBootVersion")
     implementation("io.confluent:kafka-avro-serializer:$kafkaAvroSerializer") {
