@@ -29,6 +29,13 @@ include(
     "common:application",
     "common:test-coverage-report",
 
+    "infrastructure",
+    "infrastructure:kafka",
+    "infrastructure:kafka:consumer",
+    "infrastructure:kafka:model",
+    "infrastructure:kafka:producer",
+    "infrastructure:kafka:config",
+
     "order:domain:core",
     "order:domain:application-service",
     "order:application",
@@ -37,10 +44,6 @@ include(
     "order:main",
     "order:test-coverage-report",
 
-    "infrastructure",
-    "infrastructure:kafka",
-    "infrastructure:kafka:consumer",
-    "infrastructure:kafka:model",
-    "infrastructure:kafka:producer",
-    "infrastructure:kafka:config",
+    "customer:main",
+
 )
