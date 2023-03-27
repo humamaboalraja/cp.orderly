@@ -20,15 +20,15 @@ class KafkaProducerImpl<K : Serializable, V : SpecificRecordBase>(
         topicName: String,
         key: K,
         message: V,
-    ):() -> CompletableFuture<SendResult<K, V>> {
+    ): () -> CompletableFuture<SendResult<K, V>> {
         logger.info("Sending this message $message to $topicName")
         try {
 
-        return { kafkaTemplate.send(topicName, key, message) }
+            return { kafkaTemplate.send(topicName, key, message) }
         } catch (ex: Exception) {
-                logger.severe("Something went wrong with Kafka's producer $key, message: $message, Exception: $ex")
-                throw KafkaProducerException("Something went wrong with Kafka's producer $key, message: $message, ")
-            }
+            logger.severe("Something went wrong with Kafka's producer $key, message: $message, Exception: $ex")
+            throw KafkaProducerException("Something went wrong with Kafka's producer $key, message: $message, ")
+        }
     }
 
     @PreDestroy

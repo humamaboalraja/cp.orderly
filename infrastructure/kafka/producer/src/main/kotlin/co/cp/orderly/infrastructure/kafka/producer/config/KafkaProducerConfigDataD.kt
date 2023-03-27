@@ -12,7 +12,7 @@ import org.springframework.kafka.core.ProducerFactory
 import java.io.Serializable
 
 @Configuration
-open class KafkaProducerConfig<K : Serializable, V : SpecificRecordBase>(
+open class KafkaProducerConfigDataD<K : Serializable, V : SpecificRecordBase>(
     private val kafkaConfig: KafkaConfig? = null,
     private val kafkaProducerConfigData: KafkaProducerConfigData? = null,
 ) {
