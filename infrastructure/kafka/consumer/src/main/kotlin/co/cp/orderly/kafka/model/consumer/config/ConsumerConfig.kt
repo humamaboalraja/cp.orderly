@@ -21,44 +21,33 @@ open class ConsumerConfig<K : Serializable, V : SpecificRecordBase>(
 
     @Bean
     open fun consumerConfigs(): Map<String, Any> =
-        mutableMapOf<String, Any>().also {
-            val kafkaConsumerConfig = kafkaConsumerConfig
-            it[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = kafkaConfig.data().bootstrapServers!!
-            it[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] =
-                kafkaConsumerConfig.data().keyDeserializer!!
-            it[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] =
-                kafkaConsumerConfig.data().valueDeserializer!!
-            it[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] =
-                kafkaConsumerConfig.data().autoOffsetReset!!
-            it[kafkaConfig.data().schemaRegistryUrlKey!!] =
-                kafkaConfig.data().schemaRegistryUrl!!
-            it[kafkaConsumerConfig.data().specificAvroReaderKey!!] =
-                kafkaConsumerConfig.data().specificAvroReader!!
-            it[ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG] =
-                kafkaConsumerConfig.data().sessionTimeoutMs!!
-            it[ConsumerConfig.HEARTBEAT_INTERVAL_MS_CONFIG] =
-                kafkaConsumerConfig.data().heartbeatIntervalMs!!
-            it[ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG] =
-                kafkaConsumerConfig.data().maxPollIntervalMs!!
-            it[ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG] =
-                kafkaConsumerConfig.data().maxPartitionFetchBytesDefault!! *
-                kafkaConsumerConfig.data().maxPartitionFetchBytesBoostFactor!!
-            it[ConsumerConfig.MAX_POLL_RECORDS_CONFIG] =
-                kafkaConsumerConfig.data().maxPollRecords!!
-        }
+        mapOf<String, Any>(
+            ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG to kafkaConfig.bootstrapServers!!,
+            ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG to kafkaConsumerConfig.keyDeserializer!!,
+            ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to kafkaConsumerConfig.valueDeserializer!!,
+            ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to kafkaConsumerConfig.autoOffsetReset!!,
+            kafkaConfig.schemaRegistryUrlKey!! to kafkaConfig.schemaRegistryUrl!!,
+            kafkaConsumerConfig.specificAvroReaderKey!! to kafkaConsumerConfig.specificAvroReader!!,
+            ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG to kafkaConsumerConfig.sessionTimeoutMs!!,
+            ConsumerConfig.HEARTBEAT_INTERVAL_MS_CONFIG to kafkaConsumerConfig.heartbeatIntervalMs!!,
+            ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG to kafkaConsumerConfig.maxPollIntervalMs!!,
+            ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG
+                to kafkaConsumerConfig.maxPartitionFetchBytesDefault!! *
+                    kafkaConsumerConfig.maxPartitionFetchBytesBoostFactor!!,
+            ConsumerConfig.MAX_POLL_RECORDS_CONFIG to kafkaConsumerConfig.maxPollRecords!!,
+        )
 
     @Bean
-    open fun consumerFactory(): ConsumerFactory<K, V> =
-        DefaultKafkaConsumerFactory(consumerConfigs())
+    open fun consumerFactory(): ConsumerFactory<K, V> = DefaultKafkaConsumerFactory(consumerConfigs())
 
     @Bean
     open fun kafkaListenerContainerFactory():
         KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<K, V>> =
         ConcurrentKafkaListenerContainerFactory<K, V>().also {
             it.consumerFactory = consumerFactory()
-            it.isBatchListener = kafkaConsumerConfig.data().batchListener!!
-            it.setConcurrency(kafkaConsumerConfig.data().concurrencyLevel!!)
-            it.setAutoStartup(kafkaConsumerConfig.data().autoStartup!!)
-            it.containerProperties.pollTimeout = kafkaConsumerConfig.data().pollTimeoutMs!!
+            it.isBatchListener = kafkaConsumerConfig.batchListener!!
+            it.setConcurrency(kafkaConsumerConfig.concurrencyLevel!!)
+            it.setAutoStartup(kafkaConsumerConfig.autoStartup!!)
+            it.containerProperties.pollTimeout = kafkaConsumerConfig.pollTimeoutMs!!
         }
 }

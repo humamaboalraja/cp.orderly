@@ -1,13 +1,12 @@
 package co.cp.orderly.kafka.cofig
 
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.stereotype.Component
 
-@Component
+@Configuration
+
 @ConfigurationProperties(prefix = "kafka-consumer-config")
-data class KafkaConsumerConfigData(
+open class KafkaConsumerConfig(
     var keyDeserializer: String? = null,
     var valueDeserializer: String? = null,
     var autoOffsetReset: String? = null,
@@ -24,6 +23,3 @@ data class KafkaConsumerConfigData(
     var maxPartitionFetchBytesDefault: Int? = null,
     var maxPartitionFetchBytesBoostFactor: Int? = null,
 )
-
-@Configuration
-open class KafkaConsumerConfig { @Bean open fun data(): KafkaConsumerConfigData = KafkaConsumerConfigData() }

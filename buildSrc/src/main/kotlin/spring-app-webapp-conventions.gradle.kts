@@ -5,11 +5,14 @@ plugins {
 
 val springBootVersion: String by project
 val restAssuredVersion: String by project
+val postgresqlClientVersion : String by project
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-actuator:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
+    implementation("org.postgresql:postgresql:$postgresqlClientVersion")
     // implementation(project(":x:y"))
 }
 

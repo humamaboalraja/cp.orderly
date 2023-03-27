@@ -1,6 +1,6 @@
 package co.cp.orderly.infrastructure.kafka.producer.config
 
-import co.cp.orderly.kafka.cofig.KafkaConfigData
+import co.cp.orderly.kafka.cofig.KafkaConfig
 import co.cp.orderly.kafka.cofig.KafkaProducerConfigData
 import org.apache.avro.specific.SpecificRecordBase
 import org.apache.kafka.clients.producer.ProducerConfig
@@ -13,7 +13,7 @@ import java.io.Serializable
 
 @Configuration
 open class KafkaProducerConfig<K : Serializable, V : SpecificRecordBase>(
-    private val kafkaConfig: KafkaConfigData? = null,
+    private val kafkaConfig: KafkaConfig? = null,
     private val kafkaProducerConfigData: KafkaProducerConfigData? = null,
 ) {
 
