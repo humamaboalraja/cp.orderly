@@ -22,8 +22,7 @@ class OrderService
 fun main(args: Array<String>) {
     try {
         SpringApplication.run(OrderService::class.java, *args)
-    } catch (ex: Exception){
+    } catch (ex: Exception) {
         println(ex)
     }
 }
-
