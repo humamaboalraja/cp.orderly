@@ -1,0 +1,25 @@
+server:
+  port: 7461
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=customer
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    show-sql: true
+    database: postgresql
+    open-in-view: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  sql:
+    init:
+      platform: postgres
+      mode: always
+      schema-locations: classpath:database/database-schema.sql
+      data-locations: classpath:database/seed.sql
