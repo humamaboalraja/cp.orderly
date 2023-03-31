@@ -160,8 +160,11 @@ class OrderDomainServiceImplTest {
             .orderStatus(OrderStatus.PAID)
             .errorMessages(mutableListOf("Error #1"))
             .build()
-
-        orderO.errorMessages?.let { OrderDomainServiceImpl().cancelOrderPayment(orderO, it) }
+        orderO.errorMessages?.let {
+            OrderDomainServiceImpl().cancelOrderPayment(
+                orderO, it
+            )
+        }
         assertEquals(orderO.orderStatus, OrderStatus.CANCELLING)
     }
 

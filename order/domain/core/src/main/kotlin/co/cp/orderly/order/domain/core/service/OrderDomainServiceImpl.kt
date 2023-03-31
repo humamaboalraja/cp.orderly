@@ -1,5 +1,6 @@
 package co.cp.orderly.order.domain.core.service
 
+import co.cp.orderly.domain.event.publisher.DomainEventPublisher
 import co.cp.orderly.order.domain.core.entity.Order
 import co.cp.orderly.order.domain.core.entity.Product
 import co.cp.orderly.order.domain.core.entity.Shop
@@ -16,7 +17,11 @@ open class OrderDomainServiceImpl : IOrderDomainService {
     companion object { private val logger = Logger.getLogger(OrderDomainServiceImpl::class.java.name) }
     private val utcZonedDateTime = ZonedDateTime.now(ZoneId.of("UTC"))
 
-    override fun validateAndStartOrder(order: Order, shop: Shop): OrderCreatedEvent {
+    override fun validateAndStartOrder(
+        order: Order,
+        shop: Shop,
+        orderCreatedDomainEventPublisher: DomainEventPublisher<OrderCreatedEvent>?
+    ): OrderCreatedEvent {
         validateShop(shop)
         setOrderProductData(order, shop)
         order.validateOrder()
@@ -24,13 +29,16 @@ open class OrderDomainServiceImpl : IOrderDomainService {
 
         logger.info("Order #${order.getId()!!.getValue()} is initiated")
 
-        return OrderCreatedEvent(order, utcZonedDateTime)
+        return OrderCreatedEvent(order, utcZonedDateTime, orderCreatedDomainEventPublisher)
     }
 
-    override fun payOrder(order: Order): OrderPaidEvent {
+    override fun payOrder(
+        order: Order,
+        orderCanceledDomainEventPublisher: DomainEventPublisher<OrderPaidEvent>?
+    ): OrderPaidEvent {
         order.pay()
         logger.info { "Order #${order.getId()!!.getValue()} is paid" }
-        return OrderPaidEvent(order, utcZonedDateTime)
+        return OrderPaidEvent(order, utcZonedDateTime, orderCanceledDomainEventPublisher)
     }
 
     override fun approveOrder(order: Order) {
@@ -38,10 +46,14 @@ open class OrderDomainServiceImpl : IOrderDomainService {
         logger.info { "Order with id ${order.getId()!!.getValue()} is approved" }
     }
 
-    override fun cancelOrderPayment(order: Order, errorMessages: MutableList<String>): OrderCancelledEvent {
+    override fun cancelOrderPayment(
+        order: Order,
+        errorMessages: MutableList<String>,
+        orderCanceledDomainEventPublisher: DomainEventPublisher<OrderCancelledEvent>?
+    ): OrderCancelledEvent {
         order.initCancel(errorMessages)
         logger.info { "Order payment for Order #${order.getId()!!.getValue()} is cancelling " }
-        return OrderCancelledEvent(order, utcZonedDateTime)
+        return OrderCancelledEvent(order, utcZonedDateTime, orderCanceledDomainEventPublisher)
     }
 
     override fun cancelOrder(order: Order, errorMessages: MutableList<String>) {
