@@ -1,20 +1,19 @@
 package co.cp.orderly.kafka.cofig
 
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.stereotype.Component
+import kotlin.properties.Delegates
 
 @Configuration
 @ConfigurationProperties(prefix = "kafka-producer-config")
-open class KafkaProducerConfig {
+open class KafkaProducerConfigData {
     lateinit var keySerializerClass: String
     lateinit var valueSerializerClass: String
     lateinit var compressionType: String
     lateinit var acks: String
-    lateinit var batchSize: Int
-    lateinit var batchSizeBoostFactor: Int
-    lateinit var lingerMs: Int
-    lateinit var requestTimeoutMs: Int
-    lateinit var retryCount: Int
+    var batchSize by Delegates.notNull<Int>()
+    var batchSizeBoostFactor by Delegates.notNull<Int>()
+    var lingerMs by Delegates.notNull<Int>()
+    var requestTimeoutMs by Delegates.notNull<Int>()
+    var retryCount by Delegates.notNull<Int>()
 }
