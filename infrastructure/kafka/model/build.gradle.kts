@@ -1,11 +1,13 @@
 import com.github.davidmc24.gradle.plugin.avro.GenerateAvroJavaTask
+import com.github.davidmc24.gradle.plugin.avro.ResolveAvroDependenciesTask
 import org.apache.avro.generic.GenericData.StringType
+
 val avroVersion: String by project
 
 plugins {
     id("kotlin-tests-conventions")
     id("spring-conventions")
-    id("com.github.davidmc24.gradle.plugin.avro") version "1.2.0"
+    id("com.github.davidmc24.gradle.plugin.avro-base") version "1.6.0" apply true
 }
 
 dependencies {
@@ -18,6 +20,11 @@ avro {
 }
 
 val generateAvro = tasks.register<GenerateAvroJavaTask>("generateAvro") {
+    source("src/main/resources/avro-schema")
+    setOutputDir(file("src/main/java"))
+}
+
+val generateAvroResolvedDependencies = tasks.register<ResolveAvroDependenciesTask>("resolveAvroDependencies") {
     source("src/main/resources/avro-schema")
     setOutputDir(file("src/main/java"))
 }
