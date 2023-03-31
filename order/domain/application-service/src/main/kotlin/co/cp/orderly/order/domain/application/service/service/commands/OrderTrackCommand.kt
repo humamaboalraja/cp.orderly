@@ -3,7 +3,7 @@ package co.cp.orderly.order.domain.application.service.service.commands
 import co.cp.orderly.order.domain.application.service.dto.track.order.TrackOrderQueryDTO
 import co.cp.orderly.order.domain.application.service.dto.track.order.TrackOrderResponseDTO
 import co.cp.orderly.order.domain.application.service.ports.output.repository.OrderRepository
-import co.cp.orderly.order.domain.application.service.utils.dataMapper.OrderDataMapper
+import co.cp.orderly.order.domain.application.service.utils.dataMapper.OrderApplicationServiceDataMapper
 import co.cp.orderly.order.domain.core.entity.Order
 import co.cp.orderly.order.domain.core.exception.OrderNotFoundException
 import co.cp.orderly.order.domain.core.vos.TrackingId
@@ -13,7 +13,7 @@ import java.util.logging.Logger
 
 @Component
 open class OrderTrackCommand(
-    private val orderDataMapper: OrderDataMapper,
+    private val orderApplicationServiceDataMapper: OrderApplicationServiceDataMapper,
     private val orderRepository: OrderRepository
 
 ) {
@@ -29,6 +29,6 @@ open class OrderTrackCommand(
                 throw OrderNotFoundException("Couldn't find Order #${trackOrderQueryDTO.orderTrackingId}")
             }
         }
-        return order?.let { orderResult -> orderDataMapper.orderToTrackOrderResponse(orderResult) }
+        return order?.let { orderResult -> orderApplicationServiceDataMapper.orderToTrackOrderResponse(orderResult) }
     }
 }

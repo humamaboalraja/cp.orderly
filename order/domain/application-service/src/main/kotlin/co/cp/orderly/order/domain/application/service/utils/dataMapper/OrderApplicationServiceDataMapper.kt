@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component
 import java.util.UUID
 
 @Component
-class OrderDataMapper {
+class OrderApplicationServiceDataMapper {
     fun createOrderCommandToShop(createOrderCommandDTO: CreateOrderCommandDTO): Shop =
         Shop.builder()
             .shopId(ShopId(createOrderCommandDTO.shopId))

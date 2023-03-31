@@ -24,14 +24,14 @@ open class KafkaProducerConfig<K : Serializable, V : SpecificRecordBase>(
         it[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] =
             kafkaProducerConfigData?.keySerializerClass!!
         it[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] =
-            kafkaProducerConfigData.valueSerializerClass!!
-        it[ProducerConfig.BATCH_SIZE_CONFIG] = kafkaProducerConfigData.batchSize!! *
-            kafkaProducerConfigData.batchSizeBoostFactor!!
-        it[ProducerConfig.LINGER_MS_CONFIG] = kafkaProducerConfigData.lingerMs!!
-        it[ProducerConfig.COMPRESSION_TYPE_CONFIG] = kafkaProducerConfigData.compressionType!!
-        it[ProducerConfig.ACKS_CONFIG] = kafkaProducerConfigData.acks!!
-        it[ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG] = kafkaProducerConfigData.requestTimeoutMs!!
-        it[ProducerConfig.RETRIES_CONFIG] = kafkaProducerConfigData.retryCount!!
+            kafkaProducerConfigData.valueSerializerClass
+        it[ProducerConfig.BATCH_SIZE_CONFIG] = kafkaProducerConfigData.batchSize *
+            kafkaProducerConfigData.batchSizeBoostFactor
+        it[ProducerConfig.LINGER_MS_CONFIG] = kafkaProducerConfigData.lingerMs
+        it[ProducerConfig.COMPRESSION_TYPE_CONFIG] = kafkaProducerConfigData.compressionType
+        it[ProducerConfig.ACKS_CONFIG] = kafkaProducerConfigData.acks
+        it[ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG] = kafkaProducerConfigData.requestTimeoutMs
+        it[ProducerConfig.RETRIES_CONFIG] = kafkaProducerConfigData.retryCount
     }
 
     @Bean

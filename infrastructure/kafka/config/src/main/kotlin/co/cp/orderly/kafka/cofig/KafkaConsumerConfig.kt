@@ -2,24 +2,24 @@ package co.cp.orderly.kafka.cofig
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration
+import kotlin.properties.Delegates
 
 @Configuration
-
 @ConfigurationProperties(prefix = "kafka-consumer-config")
-open class KafkaConsumerConfig(
-    var keyDeserializer: String? = null,
-    var valueDeserializer: String? = null,
-    var autoOffsetReset: String? = null,
-    var specificAvroReaderKey: String? = null,
-    var specificAvroReader: String? = null,
-    var batchListener: Boolean? = null,
-    var autoStartup: Boolean? = null,
-    var concurrencyLevel: Int? = null,
-    var sessionTimeoutMs: Int? = null,
-    var heartbeatIntervalMs: Int? = null,
-    var maxPollIntervalMs: Int? = null,
-    var pollTimeoutMs: Long? = null,
-    var maxPollRecords: Int? = null,
-    var maxPartitionFetchBytesDefault: Int? = null,
-    var maxPartitionFetchBytesBoostFactor: Int? = null,
-)
+open class KafkaConsumerConfig {
+    lateinit var keyDeserializer: String
+    lateinit var valueDeserializer: String
+    lateinit var autoOffsetReset: String
+    lateinit var specificAvroReaderKey: String
+    lateinit var specificAvroReader: String
+    var batchListener by Delegates.notNull<Boolean>()
+    var autoStartup by Delegates.notNull<Boolean>()
+    var concurrencyLevel by Delegates.notNull<Int>()
+    var sessionTimeoutMs by Delegates.notNull<Int>()
+    var heartbeatIntervalMs by Delegates.notNull<Int>()
+    var maxPollIntervalMs by Delegates.notNull<Int>()
+    var pollTimeoutMs by Delegates.notNull<Long>()
+    var maxPollRecords by Delegates.notNull<Int>()
+    var maxPartitionFetchBytesDefault by Delegates.notNull<Int>()
+    var maxPartitionFetchBytesBoostFactor by Delegates.notNull<Int>()
+}

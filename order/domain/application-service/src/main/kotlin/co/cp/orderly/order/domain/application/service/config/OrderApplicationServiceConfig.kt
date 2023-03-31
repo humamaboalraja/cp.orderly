@@ -5,9 +5,9 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 @ConfigurationProperties(prefix = "order-service")
-open class OrderApplicationServiceConfig(
-    var paymentRequestTopicName: String? = null,
-    var paymentResponseTopicName: String? = null,
-    var shopApprovalRequestTopicName: String? = null,
-    var shopApprovalResponseTopicName: String? = null
-)
+open class OrderApplicationServiceConfig {
+    lateinit var paymentRequestTopicName: String
+    lateinit var paymentResponseTopicName: String
+    lateinit var shopApprovalRequestTopicName: String
+    lateinit var shopApprovalResponseTopicName: String
+}
