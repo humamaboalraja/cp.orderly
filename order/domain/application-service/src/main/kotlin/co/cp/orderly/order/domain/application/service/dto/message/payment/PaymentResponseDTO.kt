@@ -2,6 +2,7 @@ package co.cp.orderly.order.domain.application.service.dto.message.payment
 
 import co.cp.orderly.domain.vos.PaymentStatus
 import jakarta.validation.constraints.NotNull
+import java.math.BigDecimal
 import java.time.Instant
 
 data class PaymentResponseDTO(
@@ -15,6 +16,8 @@ data class PaymentResponseDTO(
     val paymentId: String,
     @NotNull
     val customerId: String,
+    @NotNull
+    val price: BigDecimal,
     @NotNull
     val createdAt: Instant,
     @NotNull
