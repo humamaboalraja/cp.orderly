@@ -3,6 +3,12 @@ package co.cp.orderly.payment.domain.service.service
 import co.cp.orderly.payment.domain.core.events.PaymentEvent
 import co.cp.orderly.payment.domain.service.dto.PaymentServiceRequestDTO
 import co.cp.orderly.payment.domain.service.ports.input.message.listener.IPaymentRequestMessageListener
+<<<<<<< HEAD
+=======
+import co.cp.orderly.payment.domain.service.ports.outptut.message.publisher.IPaymentCanceledMessagePublisher
+import co.cp.orderly.payment.domain.service.ports.outptut.message.publisher.IPaymentCompletedMessagePublisher
+import co.cp.orderly.payment.domain.service.ports.outptut.message.publisher.IPaymentFailedMessagePublisher
+>>>>>>> 90f7b74 (feat(payment): Add `PaymentApplicationServiceRequestHelper` utility class #30")
 import co.cp.orderly.payment.domain.service.service.helper.PaymentApplicationServiceRequestHelper
 import org.springframework.stereotype.Service
 import java.util.logging.Logger
@@ -10,6 +16,12 @@ import java.util.logging.Logger
 @Service
 class PaymentRequestMessageListenerImpl(
     private val paymentRequestHelper: PaymentApplicationServiceRequestHelper,
+<<<<<<< HEAD
+=======
+    private val paymentCompletedMessagePublisher: IPaymentCompletedMessagePublisher,
+    private val paymentCanceledMessagePublisher: IPaymentCanceledMessagePublisher,
+    private val paymentFailedMessagePublisher: IPaymentFailedMessagePublisher
+>>>>>>> 90f7b74 (feat(payment): Add `PaymentApplicationServiceRequestHelper` utility class #30")
 ) : IPaymentRequestMessageListener {
 
     companion object { private val logger = Logger.getLogger(PaymentRequestMessageListenerImpl::class.java.name) }
