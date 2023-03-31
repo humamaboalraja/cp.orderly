@@ -23,6 +23,6 @@ fun main(args: Array<String>) {
     try {
         SpringApplication.run(OrderService::class.java, *args)
     } catch (ex: Exception) {
-        println(ex)
+        throw ex
     }
 }

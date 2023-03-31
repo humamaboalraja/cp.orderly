@@ -6,7 +6,7 @@ import co.cp.orderly.order.domain.application.service.ports.output.message.publi
 import co.cp.orderly.order.domain.application.service.ports.output.repository.CustomerRepository
 import co.cp.orderly.order.domain.application.service.ports.output.repository.OrderRepository
 import co.cp.orderly.order.domain.application.service.ports.output.repository.ShopRepository
-import co.cp.orderly.order.domain.application.service.utils.dataMapper.OrderDataMapper
+import co.cp.orderly.order.domain.application.service.utils.dataMapper.OrderApplicationServiceDataMapper
 import co.cp.orderly.order.domain.core.entity.Order
 import co.cp.orderly.order.domain.core.entity.Shop
 import co.cp.orderly.order.domain.core.event.OrderCreatedEvent
@@ -23,7 +23,7 @@ open class OrderCreateCommand(
     private val orderRepository: OrderRepository,
     private val customerRepository: CustomerRepository,
     private val shopRepository: ShopRepository,
-    private val orderDataMapper: OrderDataMapper,
+    private val orderApplicationServiceDataMapper: OrderApplicationServiceDataMapper,
     private val orderCreatedPaymentRequestMessagePublisher: OrderCreatedPaymentRequestMessagePublisher
 ) {
 
@@ -33,7 +33,7 @@ open class OrderCreateCommand(
         val orderCreatedEvent = persistOrder(createOrderCommandDTO)
         logger.info("Order  has been created")
         orderCreatedPaymentRequestMessagePublisher.publish(orderCreatedEvent)
-        return orderDataMapper.orderToCreateOrderResponse(
+        return orderApplicationServiceDataMapper.orderToCreateOrderResponse(
             orderCreatedEvent.order,
             "Order has been successfully created"
         )
@@ -43,7 +43,7 @@ open class OrderCreateCommand(
     open fun persistOrder(createOrderCommandDTO: CreateOrderCommandDTO): OrderCreatedEvent {
         findCustomerById(createOrderCommandDTO.customerId)
         val shop = findShopById(createOrderCommandDTO)
-        val order = orderDataMapper.createOrderCommandToOrder(createOrderCommandDTO)
+        val order = orderApplicationServiceDataMapper.createOrderCommandToOrder(createOrderCommandDTO)
         val orderCreatedEvent =
             orderDomainService.validateAndStartOrder(
                 order,
@@ -58,7 +58,7 @@ open class OrderCreateCommand(
     }
 
     private fun findShopById(createOrderCommandDTO: CreateOrderCommandDTO): Shop {
-        val shop = orderDataMapper.createOrderCommandToShop(createOrderCommandDTO)
+        val shop = orderApplicationServiceDataMapper.createOrderCommandToShop(createOrderCommandDTO)
         val shopNullable = shopRepository.getShopDetails(shop)
         if (shopNullable == null) {
             logger.warning("Couldn't find shop #${createOrderCommandDTO.shopId}")

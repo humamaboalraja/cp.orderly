@@ -15,7 +15,7 @@ import co.cp.orderly.order.domain.application.service.ports.output.repository.Cu
 import co.cp.orderly.order.domain.application.service.ports.output.repository.OrderRepository
 import co.cp.orderly.order.domain.application.service.ports.output.repository.ShopRepository
 import co.cp.orderly.order.domain.application.service.utils.MockitoHelper
-import co.cp.orderly.order.domain.application.service.utils.dataMapper.OrderDataMapper
+import co.cp.orderly.order.domain.application.service.utils.dataMapper.OrderApplicationServiceDataMapper
 import co.cp.orderly.order.domain.core.entity.Customer
 import co.cp.orderly.order.domain.core.entity.Order
 import co.cp.orderly.order.domain.core.entity.Product
@@ -49,7 +49,7 @@ open class OrderApplicationServiceTest {
 
     @Autowired private lateinit var orderRepository: OrderRepository
 
-    @Autowired private lateinit var orderDataMapper: OrderDataMapper
+    @Autowired private lateinit var orderApplicationServiceDataMapper: OrderApplicationServiceDataMapper
 
     private val customerId = UUID.fromString("36418fe4-efc1-45c1-a013-51be6af1bb0e")
     private val shopId = UUID.fromString("9fb3673d-2bfb-4e1b-a0b7-a0f2bd7098e6")
@@ -108,14 +108,14 @@ open class OrderApplicationServiceTest {
             .active(true)
             .build()
 
-        val order = orderDataMapper.createOrderCommandToOrder(createOrderCommandDTO)
+        val order = orderApplicationServiceDataMapper.createOrderCommandToOrder(createOrderCommandDTO)
         order.setId(OrderId(orderId))
 
         Mockito.`when`(customerRepository.findCustomerById(customerId)).thenReturn(customer)
 
         Mockito.`when`(
             shopRepository.getShopDetails(
-                orderDataMapper.createOrderCommandToShop(createOrderCommandDTO)
+                orderApplicationServiceDataMapper.createOrderCommandToShop(createOrderCommandDTO)
             )
         ).thenReturn(shop)
 
@@ -168,7 +168,7 @@ open class OrderApplicationServiceTest {
             ).active(false)
 
         Mockito.`when`(
-            shopRepository.getShopDetails(orderDataMapper.createOrderCommandToShop(createOrderCommandDTO))
+            shopRepository.getShopDetails(orderApplicationServiceDataMapper.createOrderCommandToShop(createOrderCommandDTO))
         )
             .thenReturn(shopResponse.build())
 
@@ -178,7 +178,7 @@ open class OrderApplicationServiceTest {
         assertEquals(orderDomainException.message, "Shop #$shopId is currently inactive")
 
         Mockito.`when`(
-            shopRepository.getShopDetails(orderDataMapper.createOrderCommandToShop(createOrderCommandDTO))
+            shopRepository.getShopDetails(orderApplicationServiceDataMapper.createOrderCommandToShop(createOrderCommandDTO))
         )
             .thenReturn(shopResponse.active(true).build())
     }
