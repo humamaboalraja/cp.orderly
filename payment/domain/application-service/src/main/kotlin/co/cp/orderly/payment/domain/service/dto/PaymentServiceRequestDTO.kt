@@ -12,6 +12,4 @@ data class PaymentServiceRequestDTO(
     var price: BigDecimal,
     var paymentOrderStatus: PaymentOrderStatus,
     var createdAt: Instant
-) {
-    fun setPaymentOrderStatus(paymentOrderStatus: PaymentOrderStatus) = run { this.paymentOrderStatus = paymentOrderStatus }
-}
+)

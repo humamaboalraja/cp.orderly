@@ -44,9 +44,16 @@ open class OrderCreateCommand(
         findCustomerById(createOrderCommandDTO.customerId)
         val shop = findShopById(createOrderCommandDTO)
         val order = orderDataMapper.createOrderCommandToOrder(createOrderCommandDTO)
-        val orderCreatedEvent = orderDomainService.validateAndStartOrder(order, shop)
+        val orderCreatedEvent =
+            orderDomainService.validateAndStartOrder(
+                order,
+                shop,
+                orderCreatedPaymentRequestMessagePublisher
+            )
         saveOrder(order)
-        logger.info("Order ${orderCreatedEvent.order.getId()?.getValue()} has been successfully created ")
+        logger.info(
+            "Order ${orderCreatedEvent.order.getId()?.getValue()} has been successfully created "
+        )
         return orderCreatedEvent
     }
 
@@ -61,10 +68,11 @@ open class OrderCreateCommand(
     }
 
     private fun findCustomerById(customerId: UUID) =
-        customerRepository.findCustomerById(customerId) ?: {
-            logger.warning("Couldn't find customer #$customerId")
-            throw OrderDomainException("Couldn't find customer #$customerId")
-        }
+        customerRepository.findCustomerById(customerId)
+            ?: {
+                logger.warning("Couldn't find customer #$customerId")
+                throw OrderDomainException("Couldn't find customer #$customerId")
+            }
 
     private fun saveOrder(order: Order): Order {
         when (val persistedOrder = orderRepository.saveOrder(order)) {
