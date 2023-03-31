@@ -11,4 +11,5 @@ open class KafkaConfig {
     lateinit var schemaRegistryUrlKey: String
     lateinit var schemaRegistryUrl: String
     var partitionsNumber by Delegates.notNull<Int>()
-    var replicationFactor by Delegates.notNull<Short>()}
+    var replicationFactor by Delegates.notNull<Short>()
+}
