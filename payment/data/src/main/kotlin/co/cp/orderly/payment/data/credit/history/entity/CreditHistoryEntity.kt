@@ -11,7 +11,7 @@ import java.time.ZonedDateTime
 import java.util.UUID
 
 @Entity
-@Table(name = "credit_history")
+@Table(name = "credit_histories")
 open class CreditHistoryEntity(
     @Id
     open var creditHistoryId: UUID?,
