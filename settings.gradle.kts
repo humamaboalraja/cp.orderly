@@ -47,5 +47,6 @@ include(
     "customer:main",
 
     "payment:domain:core",
-    "payment:domain:application-service"
+    "payment:domain:application-service",
+    "payment:data"
 )
