@@ -5,5 +5,5 @@ import co.cp.orderly.payment.domain.core.entity.CreditEntry
 
 interface ICreditEntryRepository {
     fun save(creditEntry: CreditEntry): CreditEntry
-    fun findCustomerById(customerId: CustomerId): CreditEntry?
+    fun findByCustomerId(customerId: CustomerId): CreditEntry?
 }

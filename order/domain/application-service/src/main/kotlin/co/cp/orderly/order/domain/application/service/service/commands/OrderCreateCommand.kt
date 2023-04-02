@@ -41,7 +41,7 @@ open class OrderCreateCommand(
 
     @Transactional
     open fun persistOrder(createOrderCommandDTO: CreateOrderCommandDTO): OrderCreatedEvent {
-        findCustomerById(createOrderCommandDTO.customerId)
+        findByCustomerId(createOrderCommandDTO.customerId)
         val shop = findShopById(createOrderCommandDTO)
         val order = orderApplicationServiceDataMapper.createOrderCommandToOrder(createOrderCommandDTO)
         val orderCreatedEvent =
@@ -67,8 +67,8 @@ open class OrderCreateCommand(
         return shopNullable
     }
 
-    private fun findCustomerById(customerId: UUID) =
-        customerRepository.findCustomerById(customerId)
+    private fun findByCustomerId(customerId: UUID) =
+        customerRepository.findByCustomerId(customerId)
             ?: {
                 logger.warning("Couldn't find customer #$customerId")
                 throw OrderDomainException("Couldn't find customer #$customerId")
