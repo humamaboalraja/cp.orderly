@@ -1,9 +1,9 @@
 server:
-  port: 8765
+  port: 5672
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/orderly?currentSchema=order
+    url: jdbc:postgresql://localhost:5432/orderly?currentSchema=payment
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
@@ -22,6 +22,9 @@ spring:
       platform: postgres
       mode: always
       schema-locations: classpath:database/database-schema.sql
+      data-locations: classpath:database/seed.sql
+
+
 
 kafka-config:
   bootstrap-servers: localhost:39092, localhost:29092, localhost:19092
@@ -64,9 +67,6 @@ logging:
   level:
     co.cp.orderly: DEBUG
 
-order-service:
-  kafka-topics:
-    payment-request: payment-request
-    payment-response: payment-response
-    shop-approval-request: shop-approval-request
-    shop-approval-response: shop-approval-response
+payment-service:
+  payment-request-topic-name: payment-request
+  payment-response-topic-name: payment-response
