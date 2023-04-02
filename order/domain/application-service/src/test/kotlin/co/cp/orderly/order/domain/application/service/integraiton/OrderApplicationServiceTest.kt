@@ -111,7 +111,7 @@ open class OrderApplicationServiceTest {
         val order = orderApplicationServiceDataMapper.createOrderCommandToOrder(createOrderCommandDTO)
         order.setId(OrderId(orderId))
 
-        Mockito.`when`(customerRepository.findCustomerById(customerId)).thenReturn(customer)
+        Mockito.`when`(customerRepository.findByCustomerId(customerId)).thenReturn(customer)
 
         Mockito.`when`(
             shopRepository.getShopDetails(

@@ -11,6 +11,6 @@ class CustomerRepositoryImpl(
     private val customerDataMapper: CustomerDataMapper,
     private val customerRepository: CustomerPersistenceRepository
 ) : CustomerRepository {
-    override fun findCustomerById(customerId: UUID) =
+    override fun findByCustomerId(customerId: UUID) =
         customerRepository.findById(customerId).map(customerDataMapper::customerEntityToCustomer).get()
 }

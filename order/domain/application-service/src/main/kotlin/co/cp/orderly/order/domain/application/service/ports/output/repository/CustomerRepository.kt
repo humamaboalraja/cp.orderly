@@ -4,5 +4,5 @@ import co.cp.orderly.order.domain.core.entity.Customer
 import java.util.UUID
 
 interface CustomerRepository {
-    fun findCustomerById(customerId: UUID): Customer?
+    fun findByCustomerId(customerId: UUID): Customer?
 }

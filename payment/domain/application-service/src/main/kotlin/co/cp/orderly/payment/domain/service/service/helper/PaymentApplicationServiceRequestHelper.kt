@@ -105,7 +105,7 @@ open class PaymentApplicationServiceRequestHelper(
     }
 
     private fun getCreditEntry(customerId: CustomerId?): CreditEntry? {
-        val creditEntry = creditEntryRepository.findCustomerById(customerId!!)
+        val creditEntry = creditEntryRepository.findByCustomerId(customerId!!)
         when (creditEntry) {
             null -> {
                 logger.info("Couldn't find credit entry for customer #${customerId.getValue()}")
