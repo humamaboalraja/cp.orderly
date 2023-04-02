@@ -9,5 +9,4 @@ dependencies {
     api(project(":payment:data"))
     implementation("org.springframework.boot:spring-boot-starter:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
-
 }
