@@ -27,6 +27,7 @@ include(
     "common",
     "common:domain",
     "common:application",
+    "common:data",
     "common:test-coverage-report",
 
     "infrastructure",
@@ -53,4 +54,5 @@ include(
 
     "shop:domain:core",
     "shop:domain:application-service",
+    "shop:data",
 )

@@ -5,8 +5,8 @@ import co.cp.orderly.shop.application.service.dto.ShopApprovalRequest
 import co.cp.orderly.shop.application.service.mapper.ShopApplicationServiceDataMapper
 import co.cp.orderly.shop.application.service.ports.output.message.publisher.OrderApprovedMessagePublisher
 import co.cp.orderly.shop.application.service.ports.output.message.publisher.OrderRejectedMessagePublisher
-import co.cp.orderly.shop.application.service.ports.output.repository.OrderApprovalRepository
-import co.cp.orderly.shop.application.service.ports.output.repository.ShopRepository
+import co.cp.orderly.shop.application.service.ports.output.repository.IOrderApprovalRepository
+import co.cp.orderly.shop.application.service.ports.output.repository.IShopRepository
 import co.cp.orderly.shop.domain.core.entity.Shop
 import co.cp.orderly.shop.domain.core.event.OrderApprovalEvent
 import co.cp.orderly.shop.domain.core.exception.ShopNotFoundException
@@ -20,8 +20,8 @@ import java.util.logging.Logger
 open class ShopApprovalRequestHelperService(
     private val shopDomainService: IShopDomainService,
     private val shopDataMapper: ShopApplicationServiceDataMapper,
-    private val shopRepository: ShopRepository,
-    private val orderApprovalRepository: OrderApprovalRepository,
+    private val shopRepository: IShopRepository,
+    private val orderApprovalRepository: IOrderApprovalRepository,
     private val orderApprovedMessagePublisher: OrderApprovedMessagePublisher,
     private val orderRejectedMessagePublisher: OrderRejectedMessagePublisher
 

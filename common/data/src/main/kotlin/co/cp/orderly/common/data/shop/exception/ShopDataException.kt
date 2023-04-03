@@ -1,4 +1,4 @@
-package co.cp.orderly.order.data.shop.exception
+package co.cp.orderly.common.data.shop.exception
 
 class ShopDataException(
     message: String

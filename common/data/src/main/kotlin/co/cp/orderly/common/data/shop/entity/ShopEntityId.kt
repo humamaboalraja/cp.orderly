@@ -1,4 +1,4 @@
-package co.cp.orderly.order.data.shop.entity
+package co.cp.orderly.common.data.shop.entity
 
 import java.io.Serializable
 import java.util.UUID

@@ -1,4 +1,4 @@
-package co.cp.orderly.order.data.shop.entity
+package co.cp.orderly.common.data.shop.entity
 
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
@@ -19,10 +19,11 @@ class ShopEntity(
     var shopName: String?,
     var isActive: Boolean?,
     var productName: String?,
-    var productPrice: BigDecimal?
+    var productPrice: BigDecimal?,
+    var productAvailable: Boolean?
 ) {
     constructor() : this(
-        null, null, null, null, null, null
+        null, null, null, null, null, null, null
     )
 
     override fun equals(other: Any?): Boolean {
