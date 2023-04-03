@@ -34,15 +34,16 @@ class ShopDataLayerDataMapper {
             orderApproval.getId()?.getValue(),
             orderApproval.shopId?.getValue(),
             orderApproval.orderId?.getValue(),
-            orderApproval.orderApprovalStatus)
-
+            orderApproval.orderApprovalStatus
+        )
 
     fun shopEntityToShop(shopEntities: List<ShopEntity>): Shop {
         val shopEntity = shopEntities.firstOrNull()
-            .apply { if ( this == null ) throw ShopDataException("Shop not found")}
+            .apply { if (this == null) throw ShopDataException("Shop not found") }
         val shopProducts = shopEntities.map {
             Product(
-                ProductId(it.productId!!), it.productName, Money(it.productPrice!!), isAvailable = it.productAvailable)
+                ProductId(it.productId!!), it.productName, Money(it.productPrice!!), isAvailable = it.productAvailable
+            )
         }.toList()
 
         return Shop.builder()

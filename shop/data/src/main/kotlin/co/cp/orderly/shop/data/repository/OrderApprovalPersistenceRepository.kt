@@ -6,6 +6,4 @@ import org.springframework.stereotype.Repository
 import java.util.UUID
 
 @Repository
-interface OrderApprovalPersistenceRepository : JpaRepository<OrderApprovalEntity, UUID> {
-
-}
+interface OrderApprovalPersistenceRepository : JpaRepository<OrderApprovalEntity, UUID>

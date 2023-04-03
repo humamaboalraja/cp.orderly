@@ -7,4 +7,5 @@ plugins {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
-    implementation("org.postgresql:postgresql:$postgresqlClientVersion")}
+    implementation("org.postgresql:postgresql:$postgresqlClientVersion")
+}

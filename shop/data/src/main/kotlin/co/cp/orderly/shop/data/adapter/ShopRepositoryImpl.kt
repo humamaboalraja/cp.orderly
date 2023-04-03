@@ -12,8 +12,8 @@ class ShopRepositoryImpl(
     private val shopDataLayerDataMapper: ShopDataLayerDataMapper
 ) : IShopRepository {
     override fun findShopDetails(shop: Shop): Shop? {
-        val shopProducts = shopDataLayerDataMapper.shopToShopProducts(shop);
+        val shopProducts = shopDataLayerDataMapper.shopToShopProducts(shop)
         val shopEntities = shopPersistenceRepository.findByShopIdAndProductId(shop.getId()!!.getValue(), shopProducts)
-        return shopEntities?.map { shopDataLayerDataMapper.shopEntityToShop(listOf(it)) }?.first()  
+        return shopEntities?.map { shopDataLayerDataMapper.shopEntityToShop(listOf(it)) }?.first()
     }
 }
