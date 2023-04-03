@@ -8,8 +8,8 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerA
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 
-@EnableJpaRepositories(basePackages = ["co.cp.orderly.order.data"])
-@EntityScan(basePackages = ["co.cp.orderly.order.data"])
+@EnableJpaRepositories(basePackages = ["co.cp.orderly.order.data", "co.cp.orderly.common.data"])
+@EntityScan(basePackages = ["co.cp.orderly.order.data", "co.cp.orderly.common.data"])
 @SpringBootApplication(
     scanBasePackages = ["co.cp.orderly"],
     exclude = [

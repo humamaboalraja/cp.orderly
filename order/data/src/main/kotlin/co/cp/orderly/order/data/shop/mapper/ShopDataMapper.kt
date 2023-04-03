@@ -1,10 +1,10 @@
 package co.cp.orderly.order.data.shop.mapper
 
+import co.cp.orderly.common.data.shop.entity.ShopEntity
+import co.cp.orderly.common.data.shop.exception.ShopDataException
 import co.cp.orderly.domain.vos.Money
 import co.cp.orderly.domain.vos.ProductId
 import co.cp.orderly.domain.vos.ShopId
-import co.cp.orderly.order.data.shop.entity.ShopEntity
-import co.cp.orderly.order.data.shop.exception.ShopDataException
 import co.cp.orderly.order.domain.core.entity.Product
 import co.cp.orderly.order.domain.core.entity.Shop
 import org.springframework.stereotype.Component
