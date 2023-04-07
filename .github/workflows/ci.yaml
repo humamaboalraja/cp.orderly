@@ -32,7 +32,7 @@ jobs:
           distribution: 'corretto'
           cache: 'gradle'
       - name: Run tests
-        run: ./gradlew generateAvro && gradlew test
+        run: ./gradlew test
   build:
     needs: tests
     name: Build and analyze
