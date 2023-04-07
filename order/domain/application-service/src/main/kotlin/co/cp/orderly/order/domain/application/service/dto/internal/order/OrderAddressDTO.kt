@@ -1,7 +1,7 @@
 package co.cp.orderly.order.domain.application.service.dto.internal.order
 
-import jakarta.validation.constraints.Max
-import jakarta.validation.constraints.NotNull
+import javax.validation.constraints.Max
+import javax.validation.constraints.NotNull
 
 data class OrderAddressDTO(
     @NotNull

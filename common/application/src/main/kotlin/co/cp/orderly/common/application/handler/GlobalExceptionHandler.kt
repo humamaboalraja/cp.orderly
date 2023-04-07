@@ -1,7 +1,7 @@
 package co.cp.orderly.common.application.handler
 
-import jakarta.validation.ConstraintViolationException
-import jakarta.validation.ValidationException
+import javax.validation.ConstraintViolationException
+import javax.validation.ValidationException
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler

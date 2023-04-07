@@ -1,8 +1,8 @@
 package co.cp.orderly.payment.data.credit.entry.entity
 
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.Table
+import javax.persistence.Entity
+import javax.persistence.Id
+import javax.persistence.Table
 import java.math.BigDecimal
 import java.time.ZonedDateTime
 import java.util.UUID

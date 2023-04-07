@@ -1,7 +1,7 @@
 package co.cp.orderly.order.domain.application.service.dto.message.shop
 
 import co.cp.orderly.domain.vos.OrderApprovalStatus
-import jakarta.validation.constraints.NotNull
+import javax.validation.constraints.NotNull
 import java.time.Instant
 
 data class ShopApprovalResponseDTO(

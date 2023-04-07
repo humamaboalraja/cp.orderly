@@ -1,16 +1,16 @@
 package co.cp.orderly.common.data.shop.entity
 
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.IdClass
-import jakarta.persistence.Table
+import javax.persistence.Entity
+import javax.persistence.Id
+import javax.persistence.IdClass
+import javax.persistence.Table
 import java.math.BigDecimal
 import java.util.Objects
 import java.util.UUID
 
 @Entity
 @IdClass(ShopEntityId::class)
-@Table(name = "shop_materialized_view", schema = "shop")
+@Table(name = "order_shop_materialized_view", schema = "shop")
 class ShopEntity(
     @Id
     var shopId: UUID?,
