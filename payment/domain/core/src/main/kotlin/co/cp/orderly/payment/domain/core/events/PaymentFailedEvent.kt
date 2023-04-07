@@ -10,6 +10,4 @@ class PaymentFailedEvent(
     errorMessages: MutableList<String>,
     private val paymentFailedDomainEventPublisher: DomainEventPublisher<PaymentFailedEvent>
 
-) : PaymentEvent(payment, createdAt, errorMessages) {
-    override fun fire() = run { paymentFailedDomainEventPublisher.publish(this) }
-}
+) : PaymentEvent(payment, createdAt, errorMessages)

@@ -9,6 +9,4 @@ class PaymentCompletedEvent(
     createdAt: ZonedDateTime,
     errorMessages: MutableList<String>? = null,
     private val paymentCompletedDomainEventPublisher: DomainEventPublisher<PaymentCompletedEvent>
-) : PaymentEvent(payment, createdAt, mutableListOf()) {
-    override fun fire() = run { paymentCompletedDomainEventPublisher.publish(this) }
-}
+) : PaymentEvent(payment, createdAt, mutableListOf())

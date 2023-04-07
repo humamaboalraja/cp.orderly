@@ -13,8 +13,4 @@ class OrderRejectedEvent(
     var orderRejectedDomainEventPublisher: DomainEventPublisher<OrderRejectedEvent>
 ) : OrderApprovalEvent(
     orderApproval, shopId, errorMessages, createdAt
-) {
-    override fun fire() {
-        orderRejectedDomainEventPublisher.publish(this)
-    }
-}
+)
