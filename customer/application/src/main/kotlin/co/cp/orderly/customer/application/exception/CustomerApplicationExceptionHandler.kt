@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import java.util.logging.Logger
 
 @ControllerAdvice
-class CustomerApplicationExceptionHandler: GlobalExceptionHandler() {
+class CustomerApplicationExceptionHandler : GlobalExceptionHandler() {
 
     companion object { private val logger = Logger.getLogger(CustomerApplicationExceptionHandler::class.java.name) }
 

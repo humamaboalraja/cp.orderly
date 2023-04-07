@@ -4,7 +4,6 @@ import cp.cp.orderly.customer.domain.application.service.dto.customer.CreateCust
 import cp.cp.orderly.customer.domain.application.service.dto.customer.CreateCustomerResponseDTO
 import javax.validation.Valid
 
-
 interface ICustomerApplicationService {
     fun createCustomer(@Valid createCustomerCommand: CreateCustomerCommandDTO): CreateCustomerResponseDTO
 }

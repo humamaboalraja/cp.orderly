@@ -11,6 +11,6 @@ class CustomerMessagingDataMapper {
             customerCreatedEvent.customer.getId()?.getValue().toString(),
             customerCreatedEvent.customer.username,
             customerCreatedEvent.customer.firstName,
-            customerCreatedEvent.customer.lastName)
-
+            customerCreatedEvent.customer.lastName
+        )
 }

@@ -16,14 +16,14 @@ class CustomerCreatedEventKafkaPublisher(
     private val customerMessagingDataMapper: CustomerMessagingDataMapper,
     private val kafkaProducer: KafkaProducer<String, CustomerAvroModel>,
     private val customerApplicationServiceConfig: CustomerApplicationServiceConfig
-): ICustomerMessagePublisher {
+) : ICustomerMessagePublisher {
 
     companion object { private val logger = Logger.getLogger(CustomerCreatedEventKafkaPublisher::class.java.name) }
 
-
     override fun publish(customerCreatedEvent: CustomerCreatedEvent) {
         logger.info(
-            "Received CustomerCreatedEvent for customer #${customerCreatedEvent.customer.getId()?.getValue()}")
+            "Received CustomerCreatedEvent for customer #${customerCreatedEvent.customer.getId()?.getValue()}"
+        )
         try {
             val customerAvroModel = customerMessagingDataMapper
                 .paymentResponseAvroModelToPaymentResponse(customerCreatedEvent)
@@ -39,8 +39,8 @@ class CustomerCreatedEventKafkaPublisher(
         } catch (e: Exception) {
             logger.info(
                 "Error while sending CustomerCreatedEvent to kafka " +
-                        "for customer #${customerCreatedEvent.customer.getId()?.getValue()}," +
-                        " error: {e.message}",
+                    "for customer #${customerCreatedEvent.customer.getId()?.getValue()}," +
+                    " error: {e.message}",
             )
         }
     }
@@ -51,16 +51,18 @@ class CustomerCreatedEventKafkaPublisher(
     ): ListenableFutureCallback<SendResult<String, CustomerAvroModel>> {
         return object : ListenableFutureCallback<SendResult<String, CustomerAvroModel>> {
             override fun onFailure(throwable: Throwable) {
-                logger.info("Error while sending message $message to topic $topicName" +
-                        "exception: $throwable")
+                logger.info(
+                    "Error while sending message $message to topic $topicName" +
+                        "exception: $throwable"
+                )
             }
 
             override fun onSuccess(result: SendResult<String, CustomerAvroModel>?) {
                 val metadata = result?.recordMetadata
                 logger.info(
                     "Received new metadata. Topic: ${metadata?.topic()}; Partition ${metadata?.partition()}; " +
-                            "Offset ${metadata?.offset()}; Timestamp ${metadata?.timestamp()}, " +
-                            "at ${System.nanoTime()}",
+                        "Offset ${metadata?.offset()}; Timestamp ${metadata?.timestamp()}, " +
+                        "at ${System.nanoTime()}",
                 )
             }
         }

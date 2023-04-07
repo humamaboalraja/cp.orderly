@@ -1,9 +1,9 @@
 package co.cp.orderly.customer.data.entity
 
+import java.util.UUID
 import javax.persistence.Entity
 import javax.persistence.Id
 import javax.persistence.Table
-import java.util.UUID
 
 @Entity
 @Table(name = "customers")

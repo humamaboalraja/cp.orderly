@@ -6,7 +6,6 @@ import co.cp.orderly.customer.domain.core.entity.Customer
 import cp.cp.orderly.customer.domain.application.service.ports.output.repository.ICustomerApplicationServiceRepository
 import org.springframework.stereotype.Component
 
-
 @Component
 
 class CustomerRepositoryImplCS(

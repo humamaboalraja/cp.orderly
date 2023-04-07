@@ -9,5 +9,4 @@ import org.springframework.context.annotation.Configuration
 class CustomerMainDependenciesConfig {
     @Bean
     fun customerDomainService(): ICustomerCoreDomainService? = CustomerDomainServiceImpl()
-
 }
