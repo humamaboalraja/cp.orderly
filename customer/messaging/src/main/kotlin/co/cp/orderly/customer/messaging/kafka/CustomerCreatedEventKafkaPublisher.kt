@@ -58,7 +58,7 @@ class CustomerCreatedEventKafkaPublisher(
             }
 
             override fun onSuccess(result: SendResult<String, CustomerAvroModel>?) {
-                val metadata = result?.recordMetadata
+                val metadata = result?.getRecordMetadata()
                 logger.info(
                     "Received new metadata. Topic: ${metadata?.topic()}; Partition ${metadata?.partition()}; " +
                         "Offset ${metadata?.offset()}; Timestamp ${metadata?.timestamp()}, " +

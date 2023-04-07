@@ -42,7 +42,7 @@ class KafkaMessageUtil(private val objectMapper: ObjectMapper) {
             }
 
             override fun onSuccess(result: SendResult<String?, T>?) {
-                val metadata = result?.recordMetadata
+                val metadata = result?.getRecordMetadata()
                 logger.info(
                     "Received successful response from Kafka for order id: $orderId" +
                         " Topic: ${metadata?.topic()} Partition: ${metadata?.partition()} " +
