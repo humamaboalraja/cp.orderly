@@ -7,7 +7,7 @@ val avroVersion: String by project
 plugins {
     id("kotlin-tests-conventions")
     id("spring-conventions")
-    id("com.github.davidmc24.gradle.plugin.avro-base") version "1.6.0" apply true
+    id("com.github.davidmc24.gradle.plugin.avro-base") version "1.6.0"
 }
 
 dependencies {
@@ -30,5 +30,5 @@ val generateAvroResolvedDependencies = tasks.register<ResolveAvroDependenciesTas
 }
 
 tasks.getByName("build") {
-    finalizedBy(generateAvro)
+    dependsOn(generateAvro)
 }

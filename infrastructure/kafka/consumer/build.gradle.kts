@@ -10,6 +10,5 @@ dependencies {
     api(project(":infrastructure:kafka:config"))
     implementation("org.springframework.kafka:spring-kafka:$springBootVersion")
     implementation("org.apache.avro:avro:$avroVersion")
-
     implementation("org.springframework.boot:spring-boot-starter-validation:$springBootVersion")
 }

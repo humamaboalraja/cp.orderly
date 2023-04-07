@@ -13,20 +13,18 @@ import java.io.Serializable
 
 @Configuration
 open class KafkaProducerConfig<K : Serializable, V : SpecificRecordBase>(
-    private val kafkaConfig: KafkaConfig? = null,
-    private val kafkaProducerConfigData: KafkaProducerConfigData? = null,
+    private val kafkaConfig: KafkaConfig,
+    private val kafkaProducerConfigData: KafkaProducerConfigData,
 ) {
 
     @Bean
     open fun producerConfig() = mutableMapOf<String, Any>().also {
-        it[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = kafkaConfig?.bootstrapServers!!
-        it[kafkaConfig.schemaRegistryUrlKey!!] = kafkaConfig.schemaRegistryUrl!!
-        it[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] =
-            kafkaProducerConfigData?.keySerializerClass!!
-        it[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] =
-            kafkaProducerConfigData.valueSerializerClass
-        it[ProducerConfig.BATCH_SIZE_CONFIG] = kafkaProducerConfigData.batchSize *
-            kafkaProducerConfigData.batchSizeBoostFactor
+        it[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = kafkaConfig.bootstrapServers
+        it[kafkaConfig.schemaRegistryUrlKey] = kafkaConfig.schemaRegistryUrl
+        it[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = kafkaProducerConfigData.keySerializerClass
+        it[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = kafkaProducerConfigData.valueSerializerClass
+        it[ProducerConfig.BATCH_SIZE_CONFIG] =
+            kafkaProducerConfigData.batchSize * kafkaProducerConfigData.batchSizeBoostFactor
         it[ProducerConfig.LINGER_MS_CONFIG] = kafkaProducerConfigData.lingerMs
         it[ProducerConfig.COMPRESSION_TYPE_CONFIG] = kafkaProducerConfigData.compressionType
         it[ProducerConfig.ACKS_CONFIG] = kafkaProducerConfigData.acks
