@@ -1,14 +1,14 @@
 package co.cp.orderly.payment.data.credit.history.entity
 
 import co.cp.orderly.payment.domain.core.vos.TransactionType
+import java.math.BigDecimal
+import java.time.ZonedDateTime
+import java.util.UUID
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
 import javax.persistence.Id
 import javax.persistence.Table
-import java.math.BigDecimal
-import java.time.ZonedDateTime
-import java.util.UUID
 
 @Entity
 @Table(name = "credit_histories")

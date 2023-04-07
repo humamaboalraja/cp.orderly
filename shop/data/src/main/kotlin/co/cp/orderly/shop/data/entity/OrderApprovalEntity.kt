@@ -1,12 +1,12 @@
 package co.cp.orderly.shop.data.entity
 
 import co.cp.orderly.domain.vos.OrderApprovalStatus
+import java.util.UUID
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
 import javax.persistence.Id
 import javax.persistence.Table
-import java.util.UUID
 
 @Entity
 @Table(name = "order_approval", schema = "shop")
