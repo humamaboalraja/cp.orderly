@@ -1,5 +1,8 @@
 package co.cp.orderly.order.data.order.entity
 
+import java.math.BigDecimal
+import java.util.Objects
+import java.util.UUID
 import javax.persistence.CascadeType
 import javax.persistence.Entity
 import javax.persistence.Id
@@ -7,9 +10,6 @@ import javax.persistence.IdClass
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 import javax.persistence.Table
-import java.math.BigDecimal
-import java.util.Objects
-import java.util.UUID
 
 @IdClass(OrderItemEntityId::class)
 @Table(name = "order_items")

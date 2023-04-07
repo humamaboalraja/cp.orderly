@@ -8,6 +8,4 @@ class OrderCreatedEvent(
     order: Order,
     createdAt: ZonedDateTime,
     private val orderCreatedDomainEventPublisher: DomainEventPublisher<OrderCreatedEvent>? = null
-) : OrderEvent(order, createdAt) {
-    override fun fire(): Unit = run { orderCreatedDomainEventPublisher?.publish(this) }
-}
+) : OrderEvent(order, createdAt)

@@ -1,8 +1,8 @@
 package co.cp.orderly.order.domain.application.service.dto.message.shop
 
 import co.cp.orderly.domain.vos.OrderApprovalStatus
-import javax.validation.constraints.NotNull
 import java.time.Instant
+import javax.validation.constraints.NotNull
 
 data class ShopApprovalResponseDTO(
     @NotNull
