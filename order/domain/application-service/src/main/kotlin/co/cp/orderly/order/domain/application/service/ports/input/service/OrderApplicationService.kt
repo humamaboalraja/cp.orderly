@@ -4,7 +4,7 @@ import co.cp.orderly.order.domain.application.service.dto.create.order.CreateOrd
 import co.cp.orderly.order.domain.application.service.dto.create.order.CreateOrderResponseDTO
 import co.cp.orderly.order.domain.application.service.dto.track.order.TrackOrderQueryDTO
 import co.cp.orderly.order.domain.application.service.dto.track.order.TrackOrderResponseDTO
-import javax.validation.Valid
+import jakarta.validation.Valid
 
 interface OrderApplicationService {
 
