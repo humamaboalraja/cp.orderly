@@ -11,6 +11,7 @@ open class CustomerEntity(
     @Id
     open val customerId: UUID? = null,
     open var username: String? = null,
+    open var email: String? = null,
     open var firstName: String? = null,
     open var lastName: String? = null
 ) {

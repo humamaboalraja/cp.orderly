@@ -4,30 +4,30 @@ CREATE SCHEMA customer;
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-CREATE TABLE customer.customers (
-    id uuid NOT NULL,
+CREATE TABLE customer.customers
+(
+    customer_id uuid NOT NULL,
     username character varying COLLATE pg_catalog."default" NOT NULL,
     email character varying COLLATE pg_catalog."default" NOT NULL,
     first_name character varying COLLATE pg_catalog."default" NOT NULL,
     last_name character varying COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT customer_pkey PRIMARY KEY (id)
+    CONSTRAINT customers_pkey PRIMARY KEY (customer_id)
 );
 
 DROP MATERIALIZED VIEW IF EXISTS customer.order_customer_materialized_view;
 
 CREATE MATERIALIZED VIEW customer.order_customer_materialized_view
-TABLESPACE pg_default
+    TABLESPACE pg_default
 AS
-    SELECT id,
-           username,
-           email
-           first_name,
-           last_name,
-           FROM customer.customers
+SELECT customer_id,
+       username,
+       email,
+       first_name,
+       last_name
+FROM customer.customers
 WITH DATA;
 
-
-REFRESH MATERIALIZED VIEW customer.order_customer_materialized_view;
+refresh materialized VIEW customer.order_customer_materialized_view;
 
 DROP function IF EXISTS customer.refresh_order_customer_materialized_view;
 
