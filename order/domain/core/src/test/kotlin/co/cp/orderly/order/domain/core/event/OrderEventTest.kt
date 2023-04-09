@@ -7,9 +7,7 @@ import org.junit.jupiter.api.Test
 import java.time.ZonedDateTime
 import java.util.UUID
 
-class OrderEventMock(order: Order, createdAt: ZonedDateTime) : OrderEvent(order, createdAt) {
-    override fun fire() {}
-}
+class OrderEventMock(order: Order, createdAt: ZonedDateTime) : OrderEvent(order, createdAt)
 
 class OrderEventTest {
     @Test

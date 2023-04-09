@@ -19,7 +19,6 @@ class PaymentRequestMessageListenerImpl(
             "Publishing Payment event for Order #${paymentEvent.payment.orderId?.getValue()} - " +
                 "Payment #${paymentEvent.payment.getId()?.getValue()}"
         )
-        paymentEvent.fire()
     }
 
     override fun completePayment(paymentRequest: PaymentServiceRequestDTO) {

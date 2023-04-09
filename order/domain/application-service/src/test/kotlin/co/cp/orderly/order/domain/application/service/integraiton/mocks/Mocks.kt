@@ -12,7 +12,7 @@ import org.mockito.Mockito
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
 
-@SpringBootApplication(scanBasePackages = ["co.cp.orderly.order.domain"])
+@SpringBootApplication(scanBasePackages = ["co.cp.orderly"])
 open class Mocks {
 
     @Bean

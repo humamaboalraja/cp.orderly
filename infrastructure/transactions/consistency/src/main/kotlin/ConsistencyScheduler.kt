@@ -1,0 +1,3 @@
+interface ConsistencyScheduler {
+    fun processOutboxMessage()
+}

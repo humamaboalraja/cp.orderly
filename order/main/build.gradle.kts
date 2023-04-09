@@ -12,8 +12,3 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 }
-
-tasks.register<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
-    imageName.set("${project.group}/order.service:${project.version}")
-    archiveFile.set(File("./build/libs/main.jar"))
-}

@@ -1,0 +1,37 @@
+{
+  "namespace": "co.cp.orderly.kafka.model.avro",
+  "type": "record",
+  "name": "CustomerAvroModel",
+  "fields": [
+    {
+      "name": "id",
+      "type": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "username",
+      "type": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "email",
+      "type": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "firstName",
+      "type": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "lastName",
+      "type": {
+        "type": "string"
+      }
+    }
+  ]
+}

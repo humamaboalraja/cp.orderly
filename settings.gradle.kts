@@ -36,6 +36,8 @@ include(
     "infrastructure:kafka:model",
     "infrastructure:kafka:producer",
     "infrastructure:kafka:config",
+    "infrastructure:transactions:llt",
+    "infrastructure:transactions:consistency",
 
     "order:domain:core",
     "order:domain:application-service",
@@ -45,6 +47,11 @@ include(
     "order:main",
     "order:test-coverage-report",
 
+    "customer:domain:core",
+    "customer:domain:application-service",
+    "customer:application",
+    "customer:messaging",
+    "customer:data",
     "customer:main",
 
     "payment:domain:core",

@@ -2,6 +2,7 @@
    <img src=".github/assets/images/icon.png" height="120px" alt="grind.xyz">
 
    <h3>Cp.Orderly</h3>
+   <p>An Expieremental, Clean, Extinsble, Event-Driven & Scalable <br> Goods Ordering Software Architecture</p>
 
    <div style="">
       <img src="https://github.com/humamaboalraja/cp.orderly/actions/workflows/build.yaml/badge.svg" alt="Cp.Orderly Build status" />
@@ -19,8 +20,73 @@
 
 ---
 
+<br>
+
+## 1.  Modules/Services
+All the following modules can be deployed, and managed seperately but they were put the same repository for the sake of convinience.
+ID  | Name | Description
+----|----|----
+[CS](/customer/) | Customer Service | Customers functionalities
+[SHS](./shop/) | Shop Service | Shop functionalities
+[OS](./order/) | Order service Service | Orders management functionalities
+[PS](./payment/) | Payment service | Payments functionalities
+[IM](./infrastructure/) | Infrastructure module | Contains concrete infrastructure client's implementations and consistency and long running transactions handlers
+[COM](./common/) | Commons module | contains re-usable and generic domain entities, events, exceptions, value objects and repositories
+[LOC](./local/) | Local development | consists of all the needed to-be-provisioned environments for local development porposes
 
 <br>
+
+
+## 2. Documentation
+For more detailes about how the overall system is interacting together, refer to `1.Architecture.md` in [`docs`](./docs/) where the system's documentation resides. Service specific implementation and setup details can be found in the the respective service's `README.md`.
+
+
+
+<br>
+
+
+## 3. Building
+
+### 3.1 Setting up Kafka's cluster
+...
+
+### 3.2 Building from source
+
+### 3.3 Building from source
+
+<br>
+
+
+## 4. Contribution Guidelines
+### 4.1 Commits Guidelines
+To ease up the process of versioning the software based on the kind of changes/features being applied/added, this repository is using [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) for its git commit messages.
+
+The following keywords can be used:
+
+```bash
+feat, fix, test, build, perf, docs, refactor / ref, chore
+```
+Commit keywords can include one or more scopes for the specic module being modified. E.g.
+
+```bash
+feat(CS, SHS): ..Commit message goes here..
+ref(OS): ...
+```
+
+### 4.2 Branches rules
+Every new feature/improvement is push with a new branch name is prefixed with its purpose of creation preferable `conventional-commit-keyword/brief-title`.  
+`Main` branch is protected and requires pull request and an approval of at least one reviewer. branches are squashed and rebased.
+
+### 4.3 CI Checks
+Pull requests can't be merged without meeting the requirements mentioed above, plus the linting, testing, and building jobs which should be tested during development.
+
+For checking and applying the linting changes the project is relying on [Spotless](https://github.com/diffplug/spotless).
+
+### 4.3 Re-usable module builds compponents
+...
+<br>
+
+
 
 ### Literature, references & resources
 - [The Clean Architecture - Clean Coder Blog. (2012, August 13)](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) - [Book](https://www.oreilly.com/library/view/clean-architecture-a/9780134494272/)

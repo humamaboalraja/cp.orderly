@@ -10,7 +10,7 @@ import java.util.UUID
 
 @Entity
 @IdClass(ShopEntityId::class)
-@Table(name = "shop_materialized_view", schema = "shop")
+@Table(name = "order_shop_materialized_view", schema = "shop")
 class ShopEntity(
     @Id
     var shopId: UUID?,

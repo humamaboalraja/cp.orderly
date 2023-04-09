@@ -2,16 +2,19 @@
 val springBootVersion: String by project
 val postgresqlClientVersion: String by project
 
-plugins { id("spring-app-webapp-conventions") }
-
-dependencies {
-    implementation("org.springframework.boot:spring-boot-starter:$springBootVersion")
-    implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
-    implementation("org.postgresql:postgresql:$postgresqlClientVersion")
+plugins {
+    id("spring-app-webapp-conventions")
 }
 
-tasks.register<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
-    imageName.set("${project.group}/order.service:${project.version}")
-    archiveFile.set(File("./build/libs/main.jar"))
+configurations {
+}
+
+dependencies {
+    api(project(":customer:domain:core"))
+    api(project(":customer:domain:application-service"))
+    api(project(":customer:data"))
+    api(project(":customer:application"))
+//    api(project(":customer:messaging"))
+    implementation("org.springframework.boot:spring-boot-starter:$springBootVersion")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.21")
 }
