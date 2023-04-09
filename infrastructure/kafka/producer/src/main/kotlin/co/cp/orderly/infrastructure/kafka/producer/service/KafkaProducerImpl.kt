@@ -1,6 +1,7 @@
 package co.cp.orderly.infrastructure.kafka.producer.service
 
 import co.cp.orderly.infrastructure.kafka.producer.exception.KafkaProducerException
+import jakarta.annotation.PreDestroy
 import org.apache.avro.specific.SpecificRecordBase
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.kafka.support.SendResult
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Component
 import org.springframework.util.concurrent.ListenableFutureCallback
 import java.io.Serializable
 import java.util.logging.Logger
-import javax.annotation.PreDestroy
 
 @Component
 class KafkaProducerImpl<K : Serializable, V : SpecificRecordBase>(
@@ -26,7 +26,7 @@ class KafkaProducerImpl<K : Serializable, V : SpecificRecordBase>(
         try {
 
             val kafkaResultFuture = kafkaTemplate.send(topicName, key, message)
-            kafkaResultFuture.addCallback(callback)
+            // kafkaResultFuture.addCallback(callback)
         } catch (ex: Exception) {
             logger.severe("Something went wrong with Kafka's producer $key, message: $message, Exception: $ex")
             throw KafkaProducerException("Something went wrong with Kafka's producer $key, message: $message, ")

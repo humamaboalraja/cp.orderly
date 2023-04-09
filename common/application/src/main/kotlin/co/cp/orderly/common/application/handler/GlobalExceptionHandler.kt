@@ -1,13 +1,13 @@
 package co.cp.orderly.common.application.handler
 
+import jakarta.validation.ConstraintViolationException
+import jakarta.validation.ValidationException
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.ResponseStatus
 import java.util.logging.Logger
-import javax.validation.ConstraintViolationException
-import javax.validation.ValidationException
 
 @ControllerAdvice
 open class GlobalExceptionHandler {

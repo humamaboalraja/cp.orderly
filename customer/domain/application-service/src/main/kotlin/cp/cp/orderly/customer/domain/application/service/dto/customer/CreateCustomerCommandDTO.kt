@@ -1,7 +1,7 @@
 package cp.cp.orderly.customer.domain.application.service.dto.customer
 
+import jakarta.validation.constraints.NotNull
 import java.util.UUID
-import javax.validation.constraints.NotNull
 
 data class CreateCustomerCommandDTO(
     @NotNull

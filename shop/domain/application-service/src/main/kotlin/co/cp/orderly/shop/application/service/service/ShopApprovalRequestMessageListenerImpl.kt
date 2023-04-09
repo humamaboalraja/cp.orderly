@@ -11,7 +11,6 @@ class ShopApprovalRequestMessageListenerImpl(
 ) : ShopApprovalRequestMessageListener {
 
     override fun approveOrder(shopApprovalRequest: ShopApprovalRequest) {
-        val orderApprovalEvent = shopApprovalRequestHelperService.saveOrderApproval(shopApprovalRequest)
-        orderApprovalEvent.fire()
+        shopApprovalRequestHelperService.saveOrderApproval(shopApprovalRequest)
     }
 }
