@@ -62,4 +62,5 @@ include(
     "shop:domain:core",
     "shop:domain:application-service",
     "shop:data",
+    "shop:main",
 )
