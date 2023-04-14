@@ -1,11 +1,12 @@
 package co.cp.orderly.order.domain.application.service.service.commands
 
+import co.cp.orderly.order.domain.application.service.consistency.scheduler.payment.PaymentConsistencyUtil
 import co.cp.orderly.order.domain.application.service.dto.create.order.CreateOrderCommandDTO
 import co.cp.orderly.order.domain.application.service.dto.create.order.CreateOrderResponseDTO
-import co.cp.orderly.order.domain.application.service.ports.output.message.publisher.payment.OrderCreatedPaymentRequestMessagePublisher
 import co.cp.orderly.order.domain.application.service.ports.output.repository.CustomerRepository
 import co.cp.orderly.order.domain.application.service.ports.output.repository.OrderRepository
 import co.cp.orderly.order.domain.application.service.ports.output.repository.ShopRepository
+import co.cp.orderly.order.domain.application.service.service.llt.order.OrderLltUtil
 import co.cp.orderly.order.domain.application.service.utils.dataMapper.OrderApplicationServiceDataMapper
 import co.cp.orderly.order.domain.core.entity.Order
 import co.cp.orderly.order.domain.core.entity.Shop
@@ -24,19 +25,32 @@ open class OrderCreateCommand(
     private val customerRepository: CustomerRepository,
     private val shopRepository: ShopRepository,
     private val orderApplicationServiceDataMapper: OrderApplicationServiceDataMapper,
-    private val orderCreatedPaymentRequestMessagePublisher: OrderCreatedPaymentRequestMessagePublisher
+    private val paymentConsistencyUtil: PaymentConsistencyUtil,
+    private val orderLltUtil: OrderLltUtil
 ) {
 
     companion object { private val logger = Logger.getLogger(OrderCreateCommand::class.java.name) }
 
+    @Transactional
     open fun createOrder(createOrderCommandDTO: CreateOrderCommandDTO): CreateOrderResponseDTO {
         val orderCreatedEvent = persistOrder(createOrderCommandDTO)
         logger.info("Order  has been created")
-        orderCreatedPaymentRequestMessagePublisher.publish(orderCreatedEvent)
-        return orderApplicationServiceDataMapper.orderToCreateOrderResponse(
-            orderCreatedEvent.order,
-            "Order has been successfully created"
+
+        val createdOrderResponse = orderApplicationServiceDataMapper.orderToCreateOrderResponse(
+            orderCreatedEvent.order, "Order has been successfully created"
         )
+
+        paymentConsistencyUtil.savePaymentConsistencyMessage(
+            orderApplicationServiceDataMapper.orderCreatedEventToOrderPaymentEventPayload(orderCreatedEvent),
+            orderCreatedEvent.order.orderStatus!!,
+            orderLltUtil.orderStatusToLltStatus(orderCreatedEvent.order.orderStatus),
+            ConsistencyState.STARTED,
+            UUID.randomUUID()
+        )
+
+        logger.info("Returning CreateOrderResponse with order #${orderCreatedEvent.order.getId()}")
+
+        return createdOrderResponse
     }
 
     @Transactional
@@ -44,12 +58,7 @@ open class OrderCreateCommand(
         findByCustomerId(createOrderCommandDTO.customerId)
         val shop = findShopById(createOrderCommandDTO)
         val order = orderApplicationServiceDataMapper.createOrderCommandToOrder(createOrderCommandDTO)
-        val orderCreatedEvent =
-            orderDomainService.validateAndStartOrder(
-                order,
-                shop,
-                orderCreatedPaymentRequestMessagePublisher
-            )
+        val orderCreatedEvent = orderDomainService.validateAndStartOrder(order, shop)
         saveOrder(order)
         logger.info(
             "Order ${orderCreatedEvent.order.getId()?.getValue()} has been successfully created "
