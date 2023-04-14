@@ -7,7 +7,9 @@ import org.springframework.validation.annotation.Validated
 
 @Validated
 @Service
-open class ShopApprovalResponseMessageListenerImpl : ShopApprovalResponseMessageListener {
+open class ShopApprovalResponseMessageListenerImpl(
+) : ShopApprovalResponseMessageListener {
+
 
     override fun orderApproved(shopApprovalResponseDTO: ShopApprovalResponseDTO) =
         TODO("Not yet implemented")
