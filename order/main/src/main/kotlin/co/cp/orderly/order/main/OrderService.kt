@@ -20,9 +20,5 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 )
 class OrderService
 fun main(args: Array<String>) {
-    try {
-        SpringApplication.run(OrderService::class.java, *args)
-    } catch (ex: Exception) {
-        throw ex
-    }
+    try { SpringApplication.run(OrderService::class.java, *args) } catch (ex: Exception) { throw ex }
 }

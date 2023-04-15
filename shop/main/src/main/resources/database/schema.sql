@@ -51,7 +51,7 @@ CREATE TABLE shop.shop_products
 );
 
 ALTER TABLE shop.shop_products
-    ADD CONSTRAINT "FK_RESTAURANT_ID" FOREIGN KEY (shop_id)
+    ADD CONSTRAINT "FK_SHOP_ID" FOREIGN KEY (shop_id)
         REFERENCES shop.shops (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE RESTRICT
