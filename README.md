@@ -2,7 +2,7 @@
    <img src=".github/assets/images/icon.png" height="120px" alt="grind.xyz">
 
    <h3>Cp.Orderly</h3>
-   <p>An Expieremental, Clean, Extinsble, Event-Driven & Scalable <br> Goods Ordering Software Architecture</p>
+   <p>An Expieremental, Clean, Extensible, Event-Driven & Scalable <br> Goods Ordering Software Architecture</p>
 
    <div style="">
       <img src="https://github.com/humamaboalraja/cp.orderly/actions/workflows/build.yaml/badge.svg" alt="Cp.Orderly Build status" />
