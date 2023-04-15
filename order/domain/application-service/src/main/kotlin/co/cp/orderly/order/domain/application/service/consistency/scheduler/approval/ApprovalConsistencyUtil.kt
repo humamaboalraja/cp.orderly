@@ -5,7 +5,7 @@ import co.cp.orderly.domain.vos.OrderStatus
 import co.cp.orderly.infrastructure.transactions.llt.LongRunningTransactionState
 import co.cp.orderly.infrastructure.transactions.llt.contstants.LongRunningTransactionConstants.ORDER_LLT_NAME
 import co.cp.orderly.order.domain.application.service.consistency.model.approval.OrderApprovalConsistencyMessage
-import co.cp.orderly.order.domain.application.service.consistency.model.approval.OrderApprovalEventPayload
+import co.cp.orderly.order.domain.application.service.consistency.model.approval.OrderApprovalEventDTO
 import co.cp.orderly.order.domain.application.service.ports.output.repository.ApprovalConsistencyRepository
 import co.cp.orderly.order.domain.core.exception.OrderDomainException
 import com.fasterxml.jackson.core.JsonProcessingException
@@ -57,7 +57,7 @@ open class ApprovalConsistencyUtil(
 
     @Transactional
     open fun saveApprovalConsistencyMessage(
-        orderApprovalEventPayload: OrderApprovalEventPayload,
+        orderApprovalEventDTO: OrderApprovalEventDTO,
         orderStatus: OrderStatus,
         lltState: LongRunningTransactionState,
         consistencyStatus: ConsistencyState,
@@ -66,9 +66,9 @@ open class ApprovalConsistencyUtil(
         OrderApprovalConsistencyMessage(
             UUID.randomUUID(),
             lltId,
-            orderApprovalEventPayload.createdAt,
+            orderApprovalEventDTO.createdAt,
             type = ORDER_LLT_NAME,
-            payload = createPayload(orderApprovalEventPayload),
+            payload = createPayload(orderApprovalEventDTO),
             orderStatus = orderStatus,
             lltStatus = lltState,
             consistencyState = consistencyStatus
@@ -83,13 +83,13 @@ open class ApprovalConsistencyUtil(
         approvalConsistencyRepository
             .deleteByTypeAndConsistencyStateAndLltState(ORDER_LLT_NAME, consistencyStatus, *lltState)
 
-    private fun createPayload(orderApprovalEventPayload: OrderApprovalEventPayload): String =
-        try { objectMapper.writeValueAsString(orderApprovalEventPayload) } catch (exception: JsonProcessingException) {
+    private fun createPayload(orderApprovalEventDTO: OrderApprovalEventDTO): String =
+        try { objectMapper.writeValueAsString(orderApprovalEventDTO) } catch (exception: JsonProcessingException) {
             logger.info(
-                "Couldn't create OrderApprovalEventPayload - order: #${orderApprovalEventPayload.orderId}. $exception"
+                "Couldn't create OrderApprovalEventPayload - order: #${orderApprovalEventDTO.orderId}. $exception"
             )
             throw OrderDomainException(
-                "Could not create OrderApprovalEventPayload - order #${orderApprovalEventPayload.orderId}. $exception"
+                "Could not create OrderApprovalEventPayload - order #${orderApprovalEventDTO.orderId}. $exception"
             )
         }
 }

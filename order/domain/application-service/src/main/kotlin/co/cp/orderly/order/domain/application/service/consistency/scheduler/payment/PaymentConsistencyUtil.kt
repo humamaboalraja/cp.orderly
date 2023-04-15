@@ -5,7 +5,7 @@ import co.cp.orderly.domain.vos.OrderStatus
 import co.cp.orderly.infrastructure.transactions.llt.LongRunningTransactionState
 import co.cp.orderly.infrastructure.transactions.llt.contstants.LongRunningTransactionConstants.ORDER_LLT_NAME
 import co.cp.orderly.order.domain.application.service.consistency.model.payment.OrderPaymentConsistencyMessage
-import co.cp.orderly.order.domain.application.service.consistency.model.payment.OrderPaymentEventPayload
+import co.cp.orderly.order.domain.application.service.consistency.model.payment.OrderPaymentEventDTO
 import co.cp.orderly.order.domain.application.service.ports.output.repository.PaymentConsistencyRepository
 import co.cp.orderly.order.domain.core.exception.OrderDomainException
 import com.fasterxml.jackson.core.JsonProcessingException
@@ -56,7 +56,7 @@ open class PaymentConsistencyUtil(
 
     @Transactional
     open fun savePaymentConsistencyMessage(
-        paymentEventPayload: OrderPaymentEventPayload,
+        paymentEventPayload: OrderPaymentEventDTO,
         orderStatus: OrderStatus,
         sagaStatus: LongRunningTransactionState,
         outboxStatus: ConsistencyState,
@@ -82,7 +82,7 @@ open class PaymentConsistencyUtil(
         ORDER_LLT_NAME, outboxStatus, *sagaStatus
     )
 
-    private fun createPayload(paymentEventPayload: OrderPaymentEventPayload): String {
+    private fun createPayload(paymentEventPayload: OrderPaymentEventDTO): String {
         return try {
             objectMapper!!.writeValueAsString(paymentEventPayload)
         } catch (exception: JsonProcessingException) {

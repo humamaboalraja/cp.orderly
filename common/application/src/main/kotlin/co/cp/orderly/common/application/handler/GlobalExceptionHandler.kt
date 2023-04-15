@@ -12,14 +12,19 @@ import java.util.logging.Logger
 @ControllerAdvice
 open class GlobalExceptionHandler {
 
-    companion object { private val logger = Logger.getLogger(GlobalExceptionHandler::class.java.name) }
+    companion object {
+        private val logger = Logger.getLogger(GlobalExceptionHandler::class.java.name)
+    }
 
     @ResponseBody
     @ExceptionHandler(value = [Exception::class])
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     fun handleException(exception: Exception): ErrorDTO {
-        logger.severe("${exception.message}, $exception")
-        return ErrorDTO(HttpStatus.INTERNAL_SERVER_ERROR.reasonPhrase, "Unexpected error jus occurred!")
+        logger.info("${exception.message}, $exception")
+        return ErrorDTO(
+            HttpStatus.INTERNAL_SERVER_ERROR.reasonPhrase,
+            "Unexpected error just occurred!"
+        )
     }
 
     @ResponseBody
@@ -29,13 +34,12 @@ open class GlobalExceptionHandler {
         when (validationException) {
             is ConstraintViolationException -> {
                 val violations = extractViolationsFromException(validationException)
-                logger.severe("$violations, $validationException")
+                logger.info("$violations, $validationException")
                 ErrorDTO(HttpStatus.BAD_REQUEST.reasonPhrase, violations)
             }
-
             else -> {
                 val exceptionMessage = validationException.message
-                logger.severe("$exceptionMessage, $validationException")
+                logger.info("$exceptionMessage, $validationException")
                 ErrorDTO(HttpStatus.BAD_REQUEST.reasonPhrase, exceptionMessage!!)
             }
         }
