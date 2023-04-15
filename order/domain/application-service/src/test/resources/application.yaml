@@ -1,0 +1,3 @@
+order-service:
+  consistency-scheduler-fixed-rate: 10000
+  consistency-scheduler-initial-delay: 10000

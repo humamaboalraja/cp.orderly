@@ -13,7 +13,7 @@ import java.util.logging.Logger
 @Component
 open class ShopApprovalConsistencyScheduler(
     private val approvalConsistencyHelper: ApprovalConsistencyUtil,
-    val restaurantApprovalRequestMessagePublisher: ShopApprovalRequestMessagePublisher
+    private val shopApprovalRequestMessagePublisher: ShopApprovalRequestMessagePublisher
 
 ) {
     companion object { private val logger = Logger.getLogger(ShopApprovalConsistencyCleanerScheduler::class.java.name) }
@@ -42,7 +42,7 @@ open class ShopApprovalConsistencyScheduler(
 
             consistencyMessagesResponse.forEach(
                 Consumer { consistencyMessage: OrderApprovalConsistencyMessage ->
-                    restaurantApprovalRequestMessagePublisher.publish(consistencyMessage) {
+                    shopApprovalRequestMessagePublisher.publish(consistencyMessage) {
                         orderApprovalConsistencyMessage: OrderApprovalConsistencyMessage,
                         consistencyStatus: ConsistencyState ->
                         updateConsistencyStatus(orderApprovalConsistencyMessage, consistencyStatus)

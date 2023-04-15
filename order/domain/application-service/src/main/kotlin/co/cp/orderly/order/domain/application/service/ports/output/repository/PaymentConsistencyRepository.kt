@@ -11,7 +11,7 @@ interface PaymentConsistencyRepository {
     fun findByTypeAndConsistencyStateAndLltState(
         type: String?,
         consistencyState: ConsistencyState?,
-        vararg lltState: LongRunningTransactionState?
+        vararg lltState: LongRunningTransactionState
     ): List<OrderPaymentConsistencyMessage>
 
     fun findByTypeAndLltIdAndLltState(

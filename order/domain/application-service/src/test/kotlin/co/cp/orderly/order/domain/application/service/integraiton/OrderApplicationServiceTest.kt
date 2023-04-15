@@ -1,11 +1,17 @@
 package co.cp.orderly.order.domain.application.service.integraiton
 
+import ConsistencyState
 import co.cp.orderly.domain.vos.CustomerId
 import co.cp.orderly.domain.vos.Money
 import co.cp.orderly.domain.vos.OrderId
 import co.cp.orderly.domain.vos.OrderStatus
+import co.cp.orderly.domain.vos.PaymentOrderStatus
 import co.cp.orderly.domain.vos.ProductId
 import co.cp.orderly.domain.vos.ShopId
+import co.cp.orderly.infrastructure.transactions.llt.LongRunningTransactionState
+import co.cp.orderly.infrastructure.transactions.llt.contstants.LongRunningTransactionConstants.ORDER_LLT_NAME
+import co.cp.orderly.order.domain.application.service.consistency.model.payment.OrderPaymentConsistencyMessage
+import co.cp.orderly.order.domain.application.service.consistency.model.payment.OrderPaymentEventDTO
 import co.cp.orderly.order.domain.application.service.dto.create.order.CreateOrderCommandDTO
 import co.cp.orderly.order.domain.application.service.dto.internal.order.OrderAddressDTO
 import co.cp.orderly.order.domain.application.service.dto.internal.order.OrderItemDTO
@@ -13,6 +19,7 @@ import co.cp.orderly.order.domain.application.service.integraiton.mocks.Mocks
 import co.cp.orderly.order.domain.application.service.ports.input.service.OrderApplicationService
 import co.cp.orderly.order.domain.application.service.ports.output.repository.CustomerRepository
 import co.cp.orderly.order.domain.application.service.ports.output.repository.OrderRepository
+import co.cp.orderly.order.domain.application.service.ports.output.repository.PaymentConsistencyRepository
 import co.cp.orderly.order.domain.application.service.ports.output.repository.ShopRepository
 import co.cp.orderly.order.domain.application.service.utils.MockitoHelper
 import co.cp.orderly.order.domain.application.service.utils.dataMapper.OrderApplicationServiceDataMapper
@@ -21,6 +28,8 @@ import co.cp.orderly.order.domain.core.entity.Order
 import co.cp.orderly.order.domain.core.entity.Product
 import co.cp.orderly.order.domain.core.entity.Shop
 import co.cp.orderly.order.domain.core.exception.OrderDomainException
+import com.fasterxml.jackson.core.JsonProcessingException
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeAll
@@ -31,6 +40,7 @@ import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import java.math.BigDecimal
+import java.time.ZonedDateTime
 import java.util.UUID
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -45,17 +55,22 @@ open class OrderApplicationServiceTest {
 
     @Autowired private lateinit var shopRepository: ShopRepository
 
+    @Autowired private lateinit var paymentConsistencyRepository: PaymentConsistencyRepository
+
     @Autowired private lateinit var customerRepository: CustomerRepository
 
     @Autowired private lateinit var orderRepository: OrderRepository
 
     @Autowired private lateinit var orderApplicationServiceDataMapper: OrderApplicationServiceDataMapper
 
+    @Autowired private lateinit var objectMapper: ObjectMapper
+
     private val customerId = UUID.fromString("36418fe4-efc1-45c1-a013-51be6af1bb0e")
     private val shopId = UUID.fromString("9fb3673d-2bfb-4e1b-a0b7-a0f2bd7098e6")
     private val productId = UUID.fromString("441c16fd-91de-4089-85c3-2ea388d319db")
     private val productId2nd = UUID.fromString("441c16fd-91de-4089-85c3-2ea388d319db")
     private val orderId = UUID.fromString("0ff9538f-26b5-4602-b847-1e06e970c6a9")
+    private val lltId = UUID.fromString("00262046-1c29-47b9-a2d8-47797da9e84c")
     private val price = BigDecimal("650.00")
     private val address = Triple("Streetexample 35A", "3242", "Berlin")
 
@@ -120,6 +135,8 @@ open class OrderApplicationServiceTest {
         ).thenReturn(shop)
 
         Mockito.`when`(orderRepository.saveOrder(MockitoHelper.any(Order::class.java))).thenReturn(order)
+        Mockito.`when`(paymentConsistencyRepository.save(MockitoHelper.any(OrderPaymentConsistencyMessage::class.java)))
+            .thenReturn(getOrderPaymentConsistencyMessage())
     }
 
     @Test
@@ -182,4 +199,28 @@ open class OrderApplicationServiceTest {
         )
             .thenReturn(shopResponse.active(true).build())
     }
+
+    private fun getOrderPaymentConsistencyMessage(): OrderPaymentConsistencyMessage =
+        OrderPaymentConsistencyMessage(
+            UUID.randomUUID(),
+            lltId = lltId,
+            ZonedDateTime.now(),
+            type = ORDER_LLT_NAME,
+            payload = createPayload(
+                OrderPaymentEventDTO(
+                    orderId.toString(), customerId.toString(), price, ZonedDateTime.now(), PaymentOrderStatus.PENDING.name
+                )
+            ),
+            orderStatus = OrderStatus.PENDING,
+            lltStatus = LongRunningTransactionState.STARTED,
+            consistencyState = ConsistencyState.STARTED,
+            version = 0
+        )
+
+    private fun createPayload(orderPaymentEventDTO: OrderPaymentEventDTO): String =
+        try {
+            objectMapper.writeValueAsString(orderPaymentEventDTO)
+        } catch (e: JsonProcessingException) {
+            throw OrderDomainException("Cannot create OrderPaymentEventPayload object!")
+        }
 }
