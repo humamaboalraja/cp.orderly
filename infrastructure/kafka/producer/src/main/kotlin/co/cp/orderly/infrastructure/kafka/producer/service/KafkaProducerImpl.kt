@@ -6,8 +6,8 @@ import org.apache.avro.specific.SpecificRecordBase
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.kafka.support.SendResult
 import org.springframework.stereotype.Component
-import org.springframework.util.concurrent.ListenableFutureCallback
 import java.io.Serializable
+import java.util.function.BiConsumer
 import java.util.logging.Logger
 
 @Component
@@ -20,13 +20,13 @@ class KafkaProducerImpl<K : Serializable, V : SpecificRecordBase>(
         topicName: String,
         key: K,
         message: V,
-        callback: ListenableFutureCallback<SendResult<K, V>>
+        callback: BiConsumer<SendResult<K, V>, Throwable>
     ) {
         logger.info("Sending this message $message to $topicName")
         try {
 
             val kafkaResultFuture = kafkaTemplate.send(topicName, key, message)
-            // kafkaResultFuture.addCallback(callback)
+            kafkaResultFuture.whenComplete(callback)
         } catch (ex: Exception) {
             logger.severe("Something went wrong with Kafka's producer $key, message: $message, Exception: $ex")
             throw KafkaProducerException("Something went wrong with Kafka's producer $key, message: $message, ")

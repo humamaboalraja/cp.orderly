@@ -1,6 +1,5 @@
 package co.cp.orderly.order.domain.core.service
 
-import co.cp.orderly.domain.event.publisher.DomainEventPublisher
 import co.cp.orderly.order.domain.core.entity.Order
 import co.cp.orderly.order.domain.core.entity.Product
 import co.cp.orderly.order.domain.core.entity.Shop
@@ -20,7 +19,6 @@ open class OrderDomainServiceImpl : IOrderDomainService {
     override fun validateAndStartOrder(
         order: Order,
         shop: Shop,
-        orderCreatedDomainEventPublisher: DomainEventPublisher<OrderCreatedEvent>?
     ): OrderCreatedEvent {
         validateShop(shop)
         setOrderProductData(order, shop)
@@ -29,16 +27,15 @@ open class OrderDomainServiceImpl : IOrderDomainService {
 
         logger.info("Order #${order.getId()!!.getValue()} is initiated")
 
-        return OrderCreatedEvent(order, utcZonedDateTime, orderCreatedDomainEventPublisher)
+        return OrderCreatedEvent(order, utcZonedDateTime)
     }
 
     override fun payOrder(
-        order: Order,
-        orderCanceledDomainEventPublisher: DomainEventPublisher<OrderPaidEvent>?
+        order: Order
     ): OrderPaidEvent {
         order.pay()
         logger.info { "Order #${order.getId()!!.getValue()} is paid" }
-        return OrderPaidEvent(order, utcZonedDateTime, orderCanceledDomainEventPublisher)
+        return OrderPaidEvent(order, utcZonedDateTime)
     }
 
     override fun approveOrder(order: Order) {
@@ -48,12 +45,11 @@ open class OrderDomainServiceImpl : IOrderDomainService {
 
     override fun cancelOrderPayment(
         order: Order,
-        errorMessages: MutableList<String>,
-        orderCanceledDomainEventPublisher: DomainEventPublisher<OrderCancelledEvent>?
+        errorMessages: MutableList<String>
     ): OrderCancelledEvent {
         order.initCancel(errorMessages)
         logger.info { "Order payment for Order #${order.getId()!!.getValue()} is cancelling " }
-        return OrderCancelledEvent(order, utcZonedDateTime, orderCanceledDomainEventPublisher)
+        return OrderCancelledEvent(order, utcZonedDateTime)
     }
 
     override fun cancelOrder(order: Order, errorMessages: MutableList<String>) {
@@ -61,11 +57,9 @@ open class OrderDomainServiceImpl : IOrderDomainService {
         logger.info { "Order #${order.getId()!!.getValue()} is cancelled" }
     }
 
-    private fun validateShop(shop: Shop) {
-        when {
-            shop.active == false ->
-                throw OrderDomainException("Shop #${shop.getId()!!.getValue()} is currently inactive")
-        }
+    private fun validateShop(shop: Shop) = when (shop.active) {
+        false -> throw OrderDomainException("Shop #${shop.getId()!!.getValue()} is currently inactive")
+        else -> Unit
     }
 
     private fun setOrderProductData(order: Order, shop: Shop) {

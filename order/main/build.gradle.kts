@@ -8,7 +8,7 @@ dependencies {
     api(project(":order:application"))
     api(project(":order:data"))
     api(project(":order:messaging"))
+    api(project(":common:data"))
     implementation("org.springframework.boot:spring-boot-starter:$springBootVersion")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 }

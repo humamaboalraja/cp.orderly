@@ -12,18 +12,17 @@ import java.util.UUID
 
 @Component
 class ShopDataMapper {
-    fun shopToShopProducts(shop: Shop): List<UUID?>? =
-        shop.products?.map { it.getId()?.getValue() }?.toList()
+    fun shopToShopProducts(shop: Shop): List<UUID>? = shop.products?.map { it.getId()!!.getValue() }?.toList()
 
     fun shopEntityToShop(shopEntities: List<ShopEntity>): Shop {
-        val shopEntity = shopEntities.first() ?: throw(ShopDataException("Couldn't find the shop"))
+        val shopEntity = shopEntities.first() ?: throw (ShopDataException("Couldn't find the shop"))
         return Shop.builder()
             .shopId(ShopId(shopEntity.shopId!!))
             .products(
-                shopEntities.map {
-                    Product(ProductId(it.productId!!), it.productName, Money(it.productPrice!!))
-                }.toList()
+                shopEntities.map { Product(ProductId(it.productId!!), it.productName, Money(it.productPrice!!)) }
+                    .toList()
             )
-            .active(shopEntity.isActive).build()
+            .active(shopEntity.isActive)
+            .build()
     }
 }

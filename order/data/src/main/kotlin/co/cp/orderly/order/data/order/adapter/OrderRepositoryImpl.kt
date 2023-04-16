@@ -1,5 +1,6 @@
 package co.cp.orderly.order.data.order.adapter
 
+import co.cp.orderly.domain.vos.OrderId
 import co.cp.orderly.order.data.order.mapper.OrderDataMapperUtil
 import co.cp.orderly.order.data.order.repository.OrderPersistenceRepository
 import co.cp.orderly.order.domain.application.service.ports.output.repository.OrderRepository
@@ -19,7 +20,10 @@ class OrderRepositoryImpl(
             )
         )
 
-    override fun findByTrackingId(trackingId: TrackingId): Order? =
+    override fun findById(orderId: OrderId?): Order =
+        orderPersistenceRepository.findById(orderId!!.getValue()).map(orderDataMapperUtil::orderEntityToOrder).get()
+
+    override fun findByTrackingId(trackingId: TrackingId): Order =
         orderDataMapperUtil.orderEntityToOrder(
             orderPersistenceRepository.findByTrackingId(trackingId.getValue())!!
         )
