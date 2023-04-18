@@ -1,6 +1,5 @@
 package co.cp.orderly.payment.domain.core.service
 
-import co.cp.orderly.domain.event.publisher.DomainEventPublisher
 import co.cp.orderly.domain.vos.PaymentStatus
 import co.cp.orderly.payment.domain.core.IPaymentDomainService
 import co.cp.orderly.payment.domain.core.constants.PaymentServiceDomainConstants
@@ -27,8 +26,6 @@ class PaymentDomainServiceImpl : IPaymentDomainService {
         creditEntry: CreditEntry,
         creditHistory: MutableList<CreditHistory>,
         errorMessages: MutableList<String>,
-        paymentCompletedDomainEventPublisher: DomainEventPublisher<PaymentCompletedEvent>,
-        paymentFailedDomainEventPublisher: DomainEventPublisher<PaymentFailedEvent>,
     ): PaymentEvent {
 
         payment.validatePayment(errorMessages)
@@ -43,8 +40,7 @@ class PaymentDomainServiceImpl : IPaymentDomainService {
                 logger.info("Order #${payment.customerId?.getValue()}'s is initiated")
                 payment.updateStatus(PaymentStatus.COMPLETED)
                 PaymentCompletedEvent(
-                    payment, ZonedDateTime.now(ZoneId.of(PaymentServiceDomainConstants.TIMEZONE)),
-                    paymentCompletedDomainEventPublisher = paymentCompletedDomainEventPublisher
+                    payment, ZonedDateTime.now(ZoneId.of(PaymentServiceDomainConstants.TIMEZONE))
                 )
             }
             else -> {
@@ -53,8 +49,7 @@ class PaymentDomainServiceImpl : IPaymentDomainService {
                 PaymentFailedEvent(
                     payment,
                     ZonedDateTime.now(ZoneId.of(PaymentServiceDomainConstants.TIMEZONE)),
-                    errorMessages,
-                    paymentFailedDomainEventPublisher = paymentFailedDomainEventPublisher
+                    errorMessages
                 )
             }
         }
@@ -64,9 +59,7 @@ class PaymentDomainServiceImpl : IPaymentDomainService {
         payment: Payment,
         creditEntry: CreditEntry,
         creditHistory: MutableList<CreditHistory>,
-        errorMessages: MutableList<String>,
-        paymentCanceledDomainEventPublisher: DomainEventPublisher<PaymentCancelledEvent>,
-        paymentFailedDomainEventPublisher: DomainEventPublisher<PaymentFailedEvent>,
+        errorMessages: MutableList<String>
     ): PaymentEvent {
         payment.validatePayment(errorMessages)
         addCreditEntry(payment, creditEntry)
@@ -78,15 +71,13 @@ class PaymentDomainServiceImpl : IPaymentDomainService {
                 payment.updateStatus(PaymentStatus.CANCELLED)
                 PaymentCancelledEvent(
                     payment, ZonedDateTime.now(ZoneId.of(PaymentServiceDomainConstants.TIMEZONE)),
-                    paymentCanceledDomainEventPublisher = paymentCanceledDomainEventPublisher
                 )
             }
             else -> {
                 logger.info("Order #${payment.orderId?.getValue()}'s Payment failed has failed")
                 payment.updateStatus(PaymentStatus.FAILED)
                 PaymentFailedEvent(
-                    payment, ZonedDateTime.now(ZoneId.of(PaymentServiceDomainConstants.TIMEZONE)), errorMessages,
-                    paymentFailedDomainEventPublisher
+                    payment, ZonedDateTime.now(ZoneId.of(PaymentServiceDomainConstants.TIMEZONE)), errorMessages
                 )
             }
         }
