@@ -7,6 +7,7 @@ dependencies {
     api(project(":payment:domain:core"))
     api(project(":payment:domain:application-service"))
     api(project(":payment:data"))
-    implementation("org.springframework.boot:spring-boot-starter:$springBootVersion")
+//    api(project(":payment:messaging"))
+    api("org.springframework.boot:spring-boot-starter:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
 }

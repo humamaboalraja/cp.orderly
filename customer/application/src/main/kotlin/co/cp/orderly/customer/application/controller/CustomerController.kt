@@ -5,7 +5,6 @@ import cp.cp.orderly.customer.domain.application.service.dto.customer.CreateCust
 import cp.cp.orderly.customer.domain.application.service.dto.customer.CreateCustomerResponseDTO
 import cp.cp.orderly.customer.domain.application.service.ports.input.ICustomerApplicationService
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -24,10 +23,5 @@ class CustomerController(val customerApplicationService: ICustomerApplicationSer
     ): ResponseEntity<CreateCustomerResponseDTO> {
         logger.info("Creating customer ${createCustomerCommand.username}")
         return ResponseEntity.ok(customerApplicationService.createCustomer(createCustomerCommand))
-    }
-
-    @GetMapping
-    fun returnStuff(): ResponseEntity<String> {
-        return ResponseEntity.ok("dfgdssadsafaghsd")
     }
 }

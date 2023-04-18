@@ -7,33 +7,33 @@ import org.springframework.stereotype.Component
 @Component
 class ApprovalConsistencyDataLayerDataMapper {
 
-    fun orderCreatedOutboxMessageToOutboxEntity(
-        orderApprovalOutboxMessage: OrderApprovalConsistencyMessage
+    fun orderCreatedConsistencyMessageToConsistencyEntity(
+        orderApprovalConsistencyMessage: OrderApprovalConsistencyMessage
     ): ApprovalConsistencyEntity =
         ApprovalConsistencyEntity(
-            orderApprovalOutboxMessage.id,
-            orderApprovalOutboxMessage.lltId,
-            orderApprovalOutboxMessage.createdAt,
-            type = orderApprovalOutboxMessage.type,
-            payload = orderApprovalOutboxMessage.payload,
-            orderStatus = orderApprovalOutboxMessage.orderStatus,
-            lltStatus = orderApprovalOutboxMessage.lltStatus,
-            consistencyStatus = orderApprovalOutboxMessage.consistencyState,
-            version = orderApprovalOutboxMessage.version!!
+            orderApprovalConsistencyMessage.id,
+            orderApprovalConsistencyMessage.lltId,
+            orderApprovalConsistencyMessage.createdAt,
+            type = orderApprovalConsistencyMessage.type,
+            payload = orderApprovalConsistencyMessage.payload,
+            orderStatus = orderApprovalConsistencyMessage.orderStatus,
+            lltStatus = orderApprovalConsistencyMessage.lltStatus,
+            consistencyState = orderApprovalConsistencyMessage.consistencyState,
+            version = orderApprovalConsistencyMessage.version!!
         )
 
-    fun approvalOutboxEntityToOrderApprovalOutboxMessage(
-        approvalOutboxEntity: ApprovalConsistencyEntity
+    fun approvalConsistencyEntityToOrderApprovalConsistencyMessage(
+        approvalConsistencyEntity: ApprovalConsistencyEntity
     ): OrderApprovalConsistencyMessage =
         OrderApprovalConsistencyMessage(
-            approvalOutboxEntity.id!!,
-            approvalOutboxEntity.lltId!!,
-            approvalOutboxEntity.createdAt!!,
-            type = approvalOutboxEntity.type!!,
-            payload = approvalOutboxEntity.payload!!,
-            orderStatus = approvalOutboxEntity.orderStatus!!,
-            lltStatus = approvalOutboxEntity.lltStatus!!,
-            consistencyState = approvalOutboxEntity.consistencyStatus!!,
-            version = approvalOutboxEntity.version
+            approvalConsistencyEntity.id!!,
+            approvalConsistencyEntity.lltId!!,
+            approvalConsistencyEntity.createdAt!!,
+            type = approvalConsistencyEntity.type!!,
+            payload = approvalConsistencyEntity.payload!!,
+            orderStatus = approvalConsistencyEntity.orderStatus!!,
+            lltStatus = approvalConsistencyEntity.lltStatus!!,
+            consistencyState = approvalConsistencyEntity.consistencyState!!,
+            version = approvalConsistencyEntity.version
         )
 }

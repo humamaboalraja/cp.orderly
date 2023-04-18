@@ -24,7 +24,7 @@ class CustomerApplicationServiceImpl(
         val customerCreatedEvent = createCustomerCommandHandler.createCustomer(createCustomerCommand)
         customerMessagePublisher.publish(customerCreatedEvent)
         return customerApplicationServiceDataMapper.convertCustomerToCreateCustomerResponse(
-            customerCreatedEvent.customer, "Customer has been successfully saved!"
+            customerCreatedEvent.customer, "Customer has been successfully saved."
         )
     }
 }

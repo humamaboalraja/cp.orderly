@@ -8,7 +8,7 @@ import java.util.function.BiConsumer
 
 interface ShopApprovalRequestMessagePublisher : DomainEventPublisher<OrderPaidEvent> {
     fun publish(
-        orderPaymentOutboxMessage: OrderApprovalConsistencyMessage,
+        orderPaymentConsistencyMessage: OrderApprovalConsistencyMessage,
         consistencyCallback: BiConsumer<OrderApprovalConsistencyMessage, ConsistencyState>
     )
 }

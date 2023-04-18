@@ -7,7 +7,7 @@ import java.time.Instant
 
 data class ShopApprovalRequest(
     var id: String? = null,
-    val sagaId: String? = null,
+    val lltId: String? = null,
     val shopId: String? = null,
     val orderId: String? = null,
     val shopOrderStatus: ShopOrderStatus? = null,

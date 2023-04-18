@@ -66,5 +66,5 @@ kafka-consumer-config:
 shoo-service:
   shop-approval-request-topic-name: shop-approval-request
   shop-approval-response-topic-name: shop-approval-response
-  outbox-scheduler-fixed-rate: 10000
-  outbox-scheduler-initial-delay: 10000
+  consistency-scheduler-fixed-rate: 10000
+  consistency-scheduler-initial-delay: 10000

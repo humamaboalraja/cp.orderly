@@ -221,6 +221,6 @@ open class OrderApplicationServiceTest {
         try {
             objectMapper.writeValueAsString(orderPaymentEventDTO)
         } catch (e: JsonProcessingException) {
-            throw OrderDomainException("Cannot create OrderPaymentEventPayload object!")
+            throw OrderDomainException("Cannot create OrderPaymentEventPayload object")
         }
 }

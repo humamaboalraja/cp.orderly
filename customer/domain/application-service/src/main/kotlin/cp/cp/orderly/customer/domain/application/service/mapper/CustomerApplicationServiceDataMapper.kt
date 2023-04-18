@@ -8,16 +8,14 @@ import org.springframework.stereotype.Component
 
 @Component
 class CustomerApplicationServiceDataMapper {
-    fun convertCustomerCommandToCustomer(createCustomerCommand: CreateCustomerCommandDTO): Customer {
-        return Customer(
-            CustomerId(createCustomerCommand.customerId!!),
-            createCustomerCommand.username!!,
-            createCustomerCommand.firstName!!,
-            createCustomerCommand.lastName!!
-        )
-    }
+    fun convertCustomerCommandToCustomer(createCustomerCommand: CreateCustomerCommandDTO): Customer = Customer(
+        CustomerId(createCustomerCommand.customerId!!),
+        createCustomerCommand.username!!,
+        createCustomerCommand.email!!,
+        createCustomerCommand.firstName!!,
+        createCustomerCommand.lastName!!
+    )
 
-    fun convertCustomerToCreateCustomerResponse(customer: Customer, message: String?): CreateCustomerResponseDTO {
-        return CreateCustomerResponseDTO(customer.getId()?.getValue(), message)
-    }
+    fun convertCustomerToCreateCustomerResponse(customer: Customer, message: String?): CreateCustomerResponseDTO =
+        CreateCustomerResponseDTO(customer.getId()?.getValue(), message)
 }

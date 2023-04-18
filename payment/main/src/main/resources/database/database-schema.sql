@@ -45,3 +45,30 @@ CREATE TABLE "payment".credit_history
     type transaction_type NOT NULL,
     CONSTRAINT credit_history_pkey PRIMARY KEY (id)
 );
+
+DROP TYPE IF EXISTS consistency_status;
+CREATE TYPE consistency_status AS ENUM ('STARTED', 'COMPLETED', 'FAILED');
+
+DROP TABLE IF EXISTS "payment".order_consistency CASCADE;
+
+CREATE TABLE "payment".order_consistency
+(
+    id uuid NOT NULL,
+    llt_id uuid NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    processed_at TIMESTAMP WITH TIME ZONE,
+    type character varying COLLATE pg_catalog."default" NOT NULL,
+    payload jsonb NOT NULL,
+    consistency_status consistency_status NOT NULL,
+    payment_status payment_status NOT NULL,
+    version integer NOT NULL,
+    CONSTRAINT order_consistency_pkey PRIMARY KEY (id)
+);
+
+CREATE INDEX "payment_order_consistency_llt_status"
+    ON "payment".order_consistency
+        (type, payment_status);
+
+CREATE UNIQUE INDEX "payment_order_consistency_llt_id_payment_status_consistency_sta"
+    ON "payment".order_consistency
+        (type, llt_id, payment_status, consistency_status);

@@ -29,7 +29,7 @@ class ApprovalConsistencyEntity(
     val orderStatus: OrderStatus? = null,
 
     @Enumerated(EnumType.STRING)
-    val consistencyStatus: ConsistencyState? = null,
+    val consistencyState: ConsistencyState? = null,
 
     @Version
     val version: Int = 0

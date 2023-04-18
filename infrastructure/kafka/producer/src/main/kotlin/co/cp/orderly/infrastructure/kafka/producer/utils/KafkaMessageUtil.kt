@@ -17,35 +17,35 @@ class KafkaMessageUtil(private val objectMapper: ObjectMapper) {
         return try {
             objectMapper.readValue(payload, outputType)
         } catch (exception: JsonProcessingException) {
-            logger.info("Could not read ${outputType.name}. Exception: exception")
-            throw OrderDomainException("Could not read ${outputType.name} object", exception)
+            logger.info("Couldn't read ${outputType.name}. Exception: $exception")
+            throw OrderDomainException("Couldn't read ${outputType.name} object", exception)
         }
     }
 
     fun <T, U> getKafkaCallback(
         responseTopicName: String?,
         avroModel: T,
-        outboxMessage: U,
+        consistencyMessage: U,
         consistencyCallback: BiConsumer<U, ConsistencyState?>,
         orderId: String?,
         avroModelName: String?
     ): BiConsumer<SendResult<String?, T>, Throwable?> {
-        return BiConsumer { result: SendResult<String?, T>, exception: Throwable? ->
+        return BiConsumer { result, exception ->
             if (exception == null) {
-                logger.info(
-                    "Error while sending $avroModelName. message: {$avroModel.toString()} " +
-                        "and consistency type: ${outboxMessage!!::class.java} to topic $responseTopicName" +
-                        "exception: $exception"
-                )
-                consistencyCallback.accept(outboxMessage, ConsistencyState.COMPLETED)
-            } else {
                 val metadata = result.recordMetadata
                 logger.info(
                     "Received successful response from Kafka for order id: $orderId" +
                         " Topic: ${metadata?.topic()} Partition: ${metadata?.partition()} " +
                         "Offset: ${metadata?.offset()} Timestamp: ${metadata?.timestamp()}",
                 )
-                consistencyCallback.accept(outboxMessage, ConsistencyState.FAILED)
+                consistencyCallback.accept(consistencyMessage, ConsistencyState.COMPLETED)
+            } else {
+                logger.info(
+                    "Error while sending $avroModelName. message: {$avroModel.toString()} " +
+                        "and consistency type: ${consistencyMessage!!::class.java} to topic $responseTopicName" +
+                        "exception: $exception"
+                )
+                consistencyCallback.accept(consistencyMessage, ConsistencyState.FAILED)
             }
         }
     }

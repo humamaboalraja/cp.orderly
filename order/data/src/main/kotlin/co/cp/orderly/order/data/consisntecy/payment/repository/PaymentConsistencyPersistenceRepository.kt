@@ -11,7 +11,7 @@ import java.util.UUID
 interface PaymentConsistencyPersistenceRepository : JpaRepository<PaymentConsistencyEntity, UUID> {
     fun findByTypeAndConsistencyStateAndLltStateIn(
         type: String?,
-        outboxStatus: ConsistencyState?,
+        consistencyState: ConsistencyState?,
         lltStatus: List<LongRunningTransactionState>?
     ): List<PaymentConsistencyEntity>?
 
@@ -23,7 +23,7 @@ interface PaymentConsistencyPersistenceRepository : JpaRepository<PaymentConsist
 
     fun deleteByTypeAndConsistencyStateAndLongLltIn(
         type: String?,
-        outboxStatus: ConsistencyState?,
+        consistencyState: ConsistencyState?,
         lltStatus: List<LongRunningTransactionState>?
     )
 }

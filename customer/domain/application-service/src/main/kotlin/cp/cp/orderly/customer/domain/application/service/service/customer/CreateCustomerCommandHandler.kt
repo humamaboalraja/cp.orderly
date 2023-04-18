@@ -24,8 +24,8 @@ open class CreateCustomerCommandHandler(
         val customerCreatedEvent = customerDomainService.validateAndStartCustomer(customer)
         val savedCustomer = customerRepository.createCustomer(customer)
         if (savedCustomer == null) {
-            logger.info("Could not save customer #${createCustomerCommand.customerId}")
-            throw CustomerDomainException("Could not save customer with id #${createCustomerCommand.customerId}")
+            logger.info("Couldn't save customer #${createCustomerCommand.customerId}")
+            throw CustomerDomainException("Couldn't save customer with id #${createCustomerCommand.customerId}")
         }
         logger.info("Returning CustomerCreatedEvent for customer #${createCustomerCommand.customerId}")
         return customerCreatedEvent

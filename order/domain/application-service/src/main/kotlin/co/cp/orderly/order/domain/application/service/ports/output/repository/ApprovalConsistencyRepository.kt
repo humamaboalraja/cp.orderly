@@ -6,7 +6,7 @@ import co.cp.orderly.order.domain.application.service.consistency.model.approval
 import java.util.UUID
 
 interface ApprovalConsistencyRepository {
-    fun save(orderApprovalOutboxMessage: OrderApprovalConsistencyMessage): OrderApprovalConsistencyMessage?
+    fun save(orderApprovalConsistencyMessage: OrderApprovalConsistencyMessage): OrderApprovalConsistencyMessage?
 
     fun findByTypeAndConsistencyStateAndLltState(
         type: String?,

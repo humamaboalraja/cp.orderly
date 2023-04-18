@@ -6,7 +6,7 @@ import java.time.Instant
 
 data class PaymentServiceRequestDTO(
     var id: String,
-    var sagaId: String,
+    var lltId: String,
     var orderId: String,
     var customerId: String,
     var price: BigDecimal,

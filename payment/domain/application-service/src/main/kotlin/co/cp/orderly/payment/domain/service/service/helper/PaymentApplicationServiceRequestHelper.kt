@@ -1,17 +1,17 @@
 package co.cp.orderly.payment.domain.service.service.helper
 
+import ConsistencyState
 import co.cp.orderly.domain.vos.CustomerId
+import co.cp.orderly.domain.vos.PaymentStatus
 import co.cp.orderly.payment.domain.core.IPaymentDomainService
 import co.cp.orderly.payment.domain.core.entity.CreditEntry
 import co.cp.orderly.payment.domain.core.entity.CreditHistory
 import co.cp.orderly.payment.domain.core.entity.Payment
-import co.cp.orderly.payment.domain.core.events.PaymentEvent
+import co.cp.orderly.payment.domain.service.consistency.scheduler.OrderConsistencyUtil
 import co.cp.orderly.payment.domain.service.dto.PaymentServiceRequestDTO
 import co.cp.orderly.payment.domain.service.exception.PaymentApplicationServiceException
 import co.cp.orderly.payment.domain.service.mapper.PaymentServiceDataMapper
-import co.cp.orderly.payment.domain.service.ports.outptut.message.publisher.IPaymentCanceledMessagePublisher
-import co.cp.orderly.payment.domain.service.ports.outptut.message.publisher.IPaymentCompletedMessagePublisher
-import co.cp.orderly.payment.domain.service.ports.outptut.message.publisher.IPaymentFailedMessagePublisher
+import co.cp.orderly.payment.domain.service.ports.outptut.message.publisher.IPaymentResponseMessagePublisher
 import co.cp.orderly.payment.domain.service.ports.outptut.repository.ICreditEntryRepository
 import co.cp.orderly.payment.domain.service.ports.outptut.repository.ICreditHistoryRepository
 import co.cp.orderly.payment.domain.service.ports.outptut.repository.IPaymentRepository
@@ -27,9 +27,8 @@ open class PaymentApplicationServiceRequestHelper(
     private val paymentRepository: IPaymentRepository,
     private val creditEntryRepository: ICreditEntryRepository,
     private val creditHistoryRepository: ICreditHistoryRepository,
-    private val paymentCompletedMessagePublisher: IPaymentCompletedMessagePublisher,
-    private val paymentCanceledMessagePublisher: IPaymentCanceledMessagePublisher,
-    private val paymentFailedMessagePublisher: IPaymentFailedMessagePublisher
+    private val orderConsistencyUtil: OrderConsistencyUtil,
+    private val paymentResponseMessagePublisher: IPaymentResponseMessagePublisher
 ) {
     companion object { private val logger = Logger.getLogger(PaymentApplicationServiceRequestHelper::class.java.name) }
 
@@ -49,7 +48,13 @@ open class PaymentApplicationServiceRequestHelper(
     }
 
     @Transactional
-    open fun persistPayment(paymentServiceRequestDTO: PaymentServiceRequestDTO): PaymentEvent {
+    open fun persistPayment(paymentServiceRequestDTO: PaymentServiceRequestDTO) {
+        if (publishIfConsistencyMessageProcessedForPayment(paymentServiceRequestDTO, PaymentStatus.COMPLETED)) {
+            logger.info(
+                "Consistency message of llt #${paymentServiceRequestDTO.lltId} has already been persistes"
+            )
+            return
+        }
         logger.info("Received payment completed event for order #${paymentServiceRequestDTO.orderId}")
         val payment = paymentServiceDataMapper.paymentRequestModelToPayment(paymentServiceRequestDTO)
 
@@ -58,17 +63,27 @@ open class PaymentApplicationServiceRequestHelper(
         val errorMessages = mutableListOf<String>()
 
         val paymentEvent = paymentDomainService.validateAndStartPayment(
-            payment, creditEntry!!, creditHistories!!, errorMessages,
-            paymentCompletedMessagePublisher, paymentFailedMessagePublisher
+            payment, creditEntry!!, creditHistories!!, errorMessages
         )
 
         persistObjectsState(payment, creditEntry, creditHistories, errorMessages)
 
-        return paymentEvent
+        orderConsistencyUtil.saveOrderConsistencyMessage(
+            paymentServiceDataMapper.paymentEventToOrderEventPayload(paymentEvent),
+            paymentEvent.payment.paymentStatus,
+            ConsistencyState.STARTED,
+            UUID.fromString(paymentServiceRequestDTO.lltId)
+        )
     }
 
     @Transactional
-    open fun persistCancelPayment(paymentServiceRequestDTO: PaymentServiceRequestDTO): PaymentEvent {
+    open fun persistCancelPayment(paymentServiceRequestDTO: PaymentServiceRequestDTO) {
+        if (publishIfConsistencyMessageProcessedForPayment(paymentServiceRequestDTO, PaymentStatus.CANCELLED)) {
+            logger.info(
+                "Consistency message of llt #${paymentServiceRequestDTO.lltId} has already been persisted"
+            )
+            return
+        }
         logger.info("Received payment rollback event for order #${paymentServiceRequestDTO.orderId}")
         val paymentResponse = paymentRepository.findByOrderId(UUID.fromString(paymentServiceRequestDTO.orderId))
         if (paymentResponse == null) {
@@ -83,12 +98,16 @@ open class PaymentApplicationServiceRequestHelper(
         val errorMessages = mutableListOf<String>()
 
         val paymentEvent = paymentDomainService.validateAndCancelPayment(
-            paymentResponse, creditEntry!!, creditHistories!!, errorMessages,
-            paymentCanceledMessagePublisher, paymentFailedMessagePublisher
+            paymentResponse, creditEntry!!, creditHistories!!, errorMessages
         )
 
         persistObjectsState(paymentResponse, creditEntry, creditHistories, errorMessages)
-        return paymentEvent
+        orderConsistencyUtil.saveOrderConsistencyMessage(
+            paymentServiceDataMapper.paymentEventToOrderEventPayload(paymentEvent),
+            paymentEvent.payment.paymentStatus,
+            ConsistencyState.STARTED,
+            UUID.fromString(paymentServiceRequestDTO.lltId)
+        )
     }
 
     private fun getCreditHistory(customerId: CustomerId?): List<CreditHistory>? {
@@ -102,6 +121,21 @@ open class PaymentApplicationServiceRequestHelper(
             }
         }
         return creditHistories
+    }
+
+    open fun publishIfConsistencyMessageProcessedForPayment(
+        paymentRequest: PaymentServiceRequestDTO,
+        paymentStatus: PaymentStatus
+    ): Boolean {
+        val orderConsistencyMessage =
+            orderConsistencyUtil.getCompletedOrderConsistencyMessageByLltIdAndPaymentStatus(
+                UUID.fromString(paymentRequest.lltId), paymentStatus
+            )
+        if (orderConsistencyMessage != null) {
+            paymentResponseMessagePublisher.publish(orderConsistencyMessage!!, orderConsistencyUtil::updateConsistencyMessage)
+            return true
+        }
+        return false
     }
 
     private fun getCreditEntry(customerId: CustomerId?): CreditEntry? {

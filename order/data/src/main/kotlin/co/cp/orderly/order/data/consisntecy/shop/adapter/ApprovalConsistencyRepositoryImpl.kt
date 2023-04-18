@@ -13,16 +13,16 @@ import java.util.UUID
 @Component
 class ApprovalConsistencyRepositoryImpl(
     private val approvalConsistencyPersistenceRepository: ApprovalConsistencyPersistenceRepository,
-    private val approvalOutboxDataAccessMapper: ApprovalConsistencyDataLayerDataMapper
+    private val approvalConsistencyDataMapper: ApprovalConsistencyDataLayerDataMapper
 
 ) : ApprovalConsistencyRepository {
 
     override fun save(
         orderApprovalConsistencyMessage: OrderApprovalConsistencyMessage
     ): OrderApprovalConsistencyMessage =
-        approvalOutboxDataAccessMapper.approvalOutboxEntityToOrderApprovalOutboxMessage(
+        approvalConsistencyDataMapper.approvalConsistencyEntityToOrderApprovalConsistencyMessage(
             approvalConsistencyPersistenceRepository.save(
-                approvalOutboxDataAccessMapper.orderCreatedOutboxMessageToOutboxEntity(orderApprovalConsistencyMessage)
+                approvalConsistencyDataMapper.orderCreatedConsistencyMessageToConsistencyEntity(orderApprovalConsistencyMessage)
             )
         )
 
@@ -33,10 +33,12 @@ class ApprovalConsistencyRepositoryImpl(
     ): List<OrderApprovalConsistencyMessage> =
         approvalConsistencyPersistenceRepository.findByTypeAndConsistencyStatusAndLltStatusIn(
             type, consistencyState, listOf(*lltState)
-        )!!.map(approvalOutboxDataAccessMapper::approvalOutboxEntityToOrderApprovalOutboxMessage)
+        )!!.map(approvalConsistencyDataMapper::approvalConsistencyEntityToOrderApprovalConsistencyMessage)
             .toList().also {
                 if (it == null) {
-                    throw ApprovalConsistencyNotFoundException("Approval outbox objectcould be found for saga type #$type")
+                    throw ApprovalConsistencyNotFoundException(
+                        "Approval consistency object couldn't be found for llt #$type"
+                    )
                 }
             }
 
@@ -45,7 +47,7 @@ class ApprovalConsistencyRepositoryImpl(
         lltId: UUID?,
         vararg lltState: LongRunningTransactionState
     ): OrderApprovalConsistencyMessage =
-        approvalOutboxDataAccessMapper.approvalOutboxEntityToOrderApprovalOutboxMessage(
+        approvalConsistencyDataMapper.approvalConsistencyEntityToOrderApprovalConsistencyMessage(
             approvalConsistencyPersistenceRepository
                 .findByTypeAndLltIdAndLltStatusIn(type, lltId, listOf(*lltState))!!
         )

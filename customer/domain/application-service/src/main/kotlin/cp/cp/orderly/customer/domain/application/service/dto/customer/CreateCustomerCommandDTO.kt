@@ -11,6 +11,9 @@ data class CreateCustomerCommandDTO(
     val username: String? = null,
 
     @NotNull
+    val email: String? = null,
+
+    @NotNull
     val firstName: String? = null,
 
     @NotNull

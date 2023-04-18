@@ -6,7 +6,7 @@ import co.cp.orderly.order.domain.application.service.consistency.model.payment.
 import java.util.UUID
 
 interface PaymentConsistencyRepository {
-    fun save(orderApprovalOutboxMessage: OrderPaymentConsistencyMessage?): OrderPaymentConsistencyMessage?
+    fun save(orderApprovalConsistencyMessage: OrderPaymentConsistencyMessage?): OrderPaymentConsistencyMessage?
 
     fun findByTypeAndConsistencyStateAndLltState(
         type: String?,

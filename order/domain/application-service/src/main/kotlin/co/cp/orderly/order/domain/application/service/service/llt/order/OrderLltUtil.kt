@@ -19,7 +19,7 @@ class OrderLltUtil(private val orderRepository: OrderRepository) {
         val orderResponse = orderRepository.findById(OrderId(UUID.fromString(orderId)))
         if (orderResponse == null) {
             logger.info("Order id #$orderId couldn't be found")
-            throw OrderNotFoundException("Order with id $orderId could not be found!")
+            throw OrderNotFoundException("Order with id $orderId couldn't be found")
         }
         return orderResponse
     }

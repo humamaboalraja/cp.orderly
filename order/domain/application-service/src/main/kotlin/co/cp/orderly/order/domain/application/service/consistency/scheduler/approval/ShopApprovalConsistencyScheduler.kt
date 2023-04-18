@@ -1,5 +1,6 @@
 package co.cp.orderly.order.domain.application.service.consistency.scheduler.approval
 
+import ConsistencyScheduler
 import ConsistencyState
 import co.cp.orderly.infrastructure.transactions.llt.LongRunningTransactionState
 import co.cp.orderly.order.domain.application.service.consistency.model.approval.OrderApprovalConsistencyMessage
@@ -15,7 +16,7 @@ open class ShopApprovalConsistencyScheduler(
     private val approvalConsistencyHelper: ApprovalConsistencyUtil,
     private val shopApprovalRequestMessagePublisher: ShopApprovalRequestMessagePublisher
 
-) {
+) : ConsistencyScheduler {
     companion object { private val logger = Logger.getLogger(ShopApprovalConsistencyCleanerScheduler::class.java.name) }
 
     @Transactional
@@ -23,7 +24,7 @@ open class ShopApprovalConsistencyScheduler(
         fixedDelayString = "\${order-service.consistency-scheduler-fixed-rate}",
         initialDelayString = "\${order-service.consistency-scheduler-initial-delay}"
     )
-    open fun processConsistencyMessage() {
+    override fun processConsistencyMessage() {
         val consistencyMessagesResponse: List<OrderApprovalConsistencyMessage> =
             approvalConsistencyHelper.getApprovalConsistencyMessageByConsistencyStateAndLltState(
                 ConsistencyState.STARTED,
@@ -41,8 +42,8 @@ open class ShopApprovalConsistencyScheduler(
             )
 
             consistencyMessagesResponse.forEach(
-                Consumer { consistencyMessage: OrderApprovalConsistencyMessage ->
-                    shopApprovalRequestMessagePublisher.publish(consistencyMessage) {
+                Consumer {
+                    shopApprovalRequestMessagePublisher.publish(it) {
                         orderApprovalConsistencyMessage: OrderApprovalConsistencyMessage,
                         consistencyStatus: ConsistencyState ->
                         updateConsistencyStatus(orderApprovalConsistencyMessage, consistencyStatus)
