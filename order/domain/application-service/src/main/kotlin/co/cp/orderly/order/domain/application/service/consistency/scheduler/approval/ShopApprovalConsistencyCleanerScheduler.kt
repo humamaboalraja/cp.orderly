@@ -1,5 +1,6 @@
 package co.cp.orderly.order.domain.application.service.consistency.scheduler.approval
 
+import ConsistencyScheduler
 import co.cp.orderly.infrastructure.transactions.llt.LongRunningTransactionState
 import co.cp.orderly.order.domain.application.service.consistency.model.approval.OrderApprovalConsistencyMessage
 import org.springframework.scheduling.annotation.Scheduled
@@ -9,24 +10,24 @@ import java.util.logging.Logger
 @Component
 class ShopApprovalConsistencyCleanerScheduler(
     private val approvalConsistencyUtil: ApprovalConsistencyUtil
-) {
+) : ConsistencyScheduler {
 
     companion object { private val logger = Logger.getLogger(ShopApprovalConsistencyCleanerScheduler::class.java.name) }
 
     @Scheduled(cron = "@midnight")
-    fun processOutboxMessage() {
-        val outboxMessagesResponse: List<OrderApprovalConsistencyMessage> =
+    override fun processConsistencyMessage() {
+        val consistencyMessagesResponse =
             approvalConsistencyUtil.getApprovalConsistencyMessageByConsistencyStateAndLltState(
                 ConsistencyState.COMPLETED,
                 LongRunningTransactionState.SUCCEEDED,
                 LongRunningTransactionState.FAILED,
                 LongRunningTransactionState.COMPENSATED,
             )
-        if (outboxMessagesResponse.isNotEmpty()) {
+        if (consistencyMessagesResponse.isNotEmpty()) {
             logger.info(
-                "Received ${outboxMessagesResponse.size} OrderApprovalOutboxMessage for clean-up. " +
+                "Received ${consistencyMessagesResponse.size} OrderApprovalConsistencyMessage for clean-up. " +
                     "Payloads: ${
-                    outboxMessagesResponse.map(OrderApprovalConsistencyMessage::payload).joinToString { "\n" }}"
+                    consistencyMessagesResponse.map(OrderApprovalConsistencyMessage::payload).joinToString { "\n" }}"
 
             )
             approvalConsistencyUtil.deleteApprovalConsistencyMessageByConsistencyStateAndLltState(
@@ -35,7 +36,7 @@ class ShopApprovalConsistencyCleanerScheduler(
                 LongRunningTransactionState.FAILED,
                 LongRunningTransactionState.COMPENSATED,
             )
-            logger.info("${outboxMessagesResponse.size} OrderApprovalOutboxMessages have been deleted!")
+            logger.info("${consistencyMessagesResponse.size} OrderApprovalConsistencyMessage's have been deleted")
         }
     }
 }

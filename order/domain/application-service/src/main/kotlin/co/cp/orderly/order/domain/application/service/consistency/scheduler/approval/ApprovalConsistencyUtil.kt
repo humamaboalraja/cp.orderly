@@ -44,10 +44,10 @@ open class ApprovalConsistencyUtil(
         val response: OrderApprovalConsistencyMessage = approvalConsistencyRepository.save(orderApprovalConsistencyMessage)!!
         if (response == null) {
             logger.info(
-                "Could not save OrderApprovalConsistencyMessage. id #${orderApprovalConsistencyMessage.id}"
+                "Couldn't save OrderApprovalConsistencyMessage. id #${orderApprovalConsistencyMessage.id}"
             )
             throw OrderDomainException(
-                "Could not save OrderApprovalConsistencyMessage. id #${orderApprovalConsistencyMessage.id}"
+                "Couldn't save OrderApprovalConsistencyMessage. id #${orderApprovalConsistencyMessage.id}"
             )
         }
         logger.info(
@@ -89,7 +89,7 @@ open class ApprovalConsistencyUtil(
                 "Couldn't create OrderApprovalEventPayload - order: #${orderApprovalEventDTO.orderId}. $exception"
             )
             throw OrderDomainException(
-                "Could not create OrderApprovalEventPayload - order #${orderApprovalEventDTO.orderId}. $exception"
+                "Couldn't create OrderApprovalEventPayload - order #${orderApprovalEventDTO.orderId}. $exception"
             )
         }
 }

@@ -24,7 +24,7 @@ class PaymentResponseDTOTest {
     @Test
     fun `should construct PaymentResponseDTO and check its data properties`() {
         assertNotNull(paymentResponseDTO.id)
-        assertNotNull(paymentResponseDTO.sagaId)
+        assertNotNull(paymentResponseDTO.lltId)
         assertNotNull(paymentResponseDTO.orderId)
         assertNotNull(paymentResponseDTO.paymentId)
         assertNotNull(paymentResponseDTO.customerId)
@@ -39,7 +39,7 @@ class PaymentResponseDTOTest {
         Assertions.assertEquals(
             paymentResponseDTO.toString(),
             "PaymentResponseDTO(id=36418fe4-efc1-45c1-a013-51be6af1bb0e, " +
-                "sagaId=2d495872-bcbc-4b62-91c5-1c546397d2a1, " +
+                "lltId=2d495872-bcbc-4b62-91c5-1c546397d2a1, " +
                 "orderId=441c16fd-91de-4089-85c3-2ea388d319db, " +
                 "paymentId=9ff9538f-26b5-4602-b847-1e06e970c6a9, " +
                 "customerId=0ff9538f-26b5-4602-b847-1e06e970c6a9, " +

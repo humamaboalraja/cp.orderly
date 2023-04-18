@@ -40,11 +40,11 @@ open class OrderPaymentLlt(
     override fun process(paymentResponse: PaymentResponseDTO) {
         val orderPaymentConsistencyMessageResponse: OrderPaymentConsistencyMessage =
             paymentConsistencyUtil.getPaymentConsistencyMessageByLltIdAndLltState(
-                UUID.fromString(paymentResponse.sagaId),
+                UUID.fromString(paymentResponse.lltId),
                 LongRunningTransactionState.STARTED
             )
         if (orderPaymentConsistencyMessageResponse == null) {
-            logger.info("An outbox message with saga #${paymentResponse.sagaId} is already processed")
+            logger.info("Consistency message of llt #${paymentResponse.lltId} is already processed")
             return
         }
         val domainEvent = completePaymentForOrder(paymentResponse)
@@ -57,7 +57,7 @@ open class OrderPaymentLlt(
                 orderDataMapper.orderPaidEventToOrderApprovalEventPayload(domainEvent)!!,
                 domainEvent.order.orderStatus!!, lltState, ConsistencyState.STARTED,
                 UUID.fromString(
-                    paymentResponse.sagaId
+                    paymentResponse.lltId
                 )
             )
         logger.info("Order #${domainEvent.order.getId()?.getValue()} is paid")
@@ -67,11 +67,11 @@ open class OrderPaymentLlt(
     override fun rollback(paymentResponse: PaymentResponseDTO) {
         val orderPaymentConsistencyMessageResponse =
             paymentConsistencyUtil.getPaymentConsistencyMessageByLltIdAndLltState(
-                UUID.fromString(paymentResponse.sagaId),
+                UUID.fromString(paymentResponse.lltId),
                 *getCurrentLltStatus(paymentResponse.paymentStatus)
             )
         if (orderPaymentConsistencyMessageResponse == null) {
-            logger.info("Outbox message with saga id #${paymentResponse.sagaId} is already rollbacked")
+            logger.info("Consistency message with llt id #${paymentResponse.lltId} is already rollbacked")
             return
         }
         val order = rollbackPaymentForOrder(paymentResponse)
@@ -81,7 +81,7 @@ open class OrderPaymentLlt(
         )
         if (paymentResponse.paymentStatus === PaymentStatus.CANCELLED) {
             approvalConsistencyUtil.save(
-                getUpdatedApprovalConsistencyMessage(paymentResponse.sagaId, order.orderStatus!!, lltState)
+                getUpdatedApprovalConsistencyMessage(paymentResponse.lltId, order.orderStatus!!, lltState)
             )
         }
         logger.info("Order #${order.getId()?.getValue()} is cancelled")
@@ -91,7 +91,7 @@ open class OrderPaymentLlt(
         val orderResponse = orderRepository.findById(OrderId(UUID.fromString(orderId)))
         if (orderResponse == null) {
             logger.info("Order # $orderId couldn't be found")
-            throw OrderNotFoundException("Order with id $orderId could not be found!")
+            throw OrderNotFoundException("Order with id $orderId couldn't be found")
         }
         return orderResponse
     }
@@ -142,8 +142,7 @@ open class OrderPaymentLlt(
             )
         if (orderApprovalConsistencyMessageResponse == null) {
             throw OrderDomainException(
-                "Approval outbox message could not be found in " +
-                    LongRunningTransactionState.COMPENSATING.name + " status!"
+                "Approval Consistency message couldn't be found in ${LongRunningTransactionState.COMPENSATING.name}"
             )
         }
         orderApprovalConsistencyMessageResponse.processedAt = ZonedDateTime.now(ZoneId.of("UTC"))

@@ -8,7 +8,7 @@ import java.util.function.BiConsumer
 
 interface PaymentRequestMessagePublisher : DomainEventPublisher<OrderCancelledEvent> {
     fun publish(
-        orderPaymentOutboxMessage: OrderPaymentConsistencyMessage,
+        orderPaymentConsistencyMessage: OrderPaymentConsistencyMessage,
         consistencyCallback: BiConsumer<OrderPaymentConsistencyMessage, ConsistencyState>
     )
 }

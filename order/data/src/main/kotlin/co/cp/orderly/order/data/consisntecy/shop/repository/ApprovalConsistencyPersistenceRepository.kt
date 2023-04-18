@@ -12,19 +12,19 @@ interface ApprovalConsistencyPersistenceRepository : JpaRepository<ApprovalConsi
 
     fun findByTypeAndConsistencyStatusAndLltStatusIn(
         type: String?,
-        outboxStatus: ConsistencyState?,
-        sagaStatus: List<LongRunningTransactionState?>?
+        consistencyStatus: ConsistencyState?,
+        lltStatus: List<LongRunningTransactionState?>?
     ): List<ApprovalConsistencyEntity>?
 
     fun findByTypeAndLltIdAndLltStatusIn(
         type: String?,
-        sagaId: UUID?,
-        sagaStatus: List<LongRunningTransactionState?>?
+        lltId: UUID?,
+        lltStatus: List<LongRunningTransactionState?>?
     ): ApprovalConsistencyEntity?
 
     fun deleteByTypeAndConsistencyStatusAndLltStatusIn(
         type: String?,
-        outboxStatus: ConsistencyState?,
-        sagaStatus: List<LongRunningTransactionState>
+        consistencyStatus: ConsistencyState?,
+        lltStatus: List<LongRunningTransactionState>
     )
 }

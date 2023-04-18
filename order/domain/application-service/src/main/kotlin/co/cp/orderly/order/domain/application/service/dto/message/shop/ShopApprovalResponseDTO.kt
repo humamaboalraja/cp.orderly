@@ -8,7 +8,7 @@ data class ShopApprovalResponseDTO(
     @NotNull
     val id: String,
     @NotNull
-    val sagaId: String,
+    val lltId: String,
     @NotNull
     val orderId: String,
     @NotNull

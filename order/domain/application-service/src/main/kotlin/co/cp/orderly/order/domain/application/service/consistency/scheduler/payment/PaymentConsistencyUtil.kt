@@ -25,28 +25,26 @@ open class PaymentConsistencyUtil(
 
     @Transactional(readOnly = true)
     open fun getPaymentConsistencyMessageByConsistencyStateAndLltState(
-        outboxStatus: ConsistencyState?,
-        vararg sagaStatus: LongRunningTransactionState
-    ): List<OrderPaymentConsistencyMessage> {
-        return paymentConsistencyRepository.findByTypeAndConsistencyStateAndLltState(
-            ORDER_LLT_NAME, outboxStatus, *sagaStatus
-        )
-    }
+        consistencyStatus: ConsistencyState?,
+        vararg lltStatus: LongRunningTransactionState
+    ) = paymentConsistencyRepository.findByTypeAndConsistencyStateAndLltState(
+        ORDER_LLT_NAME, consistencyStatus, *lltStatus
+    )
 
     @Transactional(readOnly = true)
     open fun getPaymentConsistencyMessageByLltIdAndLltState(
-        sagaId: UUID?,
-        vararg sagaStatus: LongRunningTransactionState
+        lltId: UUID?,
+        vararg lltStatus: LongRunningTransactionState
     ): OrderPaymentConsistencyMessage =
-        paymentConsistencyRepository.findByTypeAndLltIdAndLltState(ORDER_LLT_NAME, sagaId, *sagaStatus)
+        paymentConsistencyRepository.findByTypeAndLltIdAndLltState(ORDER_LLT_NAME, lltId, *lltStatus)
 
     @Transactional
     open fun save(orderPaymentConsistencyMessage: OrderPaymentConsistencyMessage) {
         val response = paymentConsistencyRepository.save(orderPaymentConsistencyMessage)!!
         if (response == null) {
-            logger.info("Could not save OrderPaymentConsistencyMessage id #${orderPaymentConsistencyMessage.id}")
+            logger.info("Couldn't save OrderPaymentConsistencyMessage id #${orderPaymentConsistencyMessage.id}")
             throw OrderDomainException(
-                "Could not save OrderPaymentConsistencyMessage id #${orderPaymentConsistencyMessage.id}"
+                "Couldn't save OrderPaymentConsistencyMessage id #${orderPaymentConsistencyMessage.id}"
             )
         }
         logger.info(
@@ -58,42 +56,41 @@ open class PaymentConsistencyUtil(
     open fun savePaymentConsistencyMessage(
         paymentEventPayload: OrderPaymentEventDTO,
         orderStatus: OrderStatus,
-        sagaStatus: LongRunningTransactionState,
-        outboxStatus: ConsistencyState,
-        sagaId: UUID
+        lltStatus: LongRunningTransactionState,
+        consistencyStatus: ConsistencyState,
+        lltId: UUID
     ) = save(
         OrderPaymentConsistencyMessage(
             id = UUID.randomUUID(),
-            lltId = sagaId,
+            lltId = lltId,
             createdAt = paymentEventPayload.createdAt,
             type = ORDER_LLT_NAME,
             payload = createPayload(paymentEventPayload),
             orderStatus = orderStatus,
-            lltStatus = sagaStatus,
-            consistencyState = outboxStatus
+            lltStatus = lltStatus,
+            consistencyState = consistencyStatus
         )
     )
 
     @Transactional
     open fun deletePaymentConsistencyMessageByConsistencyStateAndLltState(
-        outboxStatus: ConsistencyState?,
-        vararg sagaStatus: LongRunningTransactionState
+        consistencyStatus: ConsistencyState?,
+        vararg lltStatus: LongRunningTransactionState
     ) = paymentConsistencyRepository.deleteByTypeAndConsistencyStateAndLltState(
-        ORDER_LLT_NAME, outboxStatus, *sagaStatus
+        ORDER_LLT_NAME, consistencyStatus, *lltStatus
     )
 
-    private fun createPayload(paymentEventPayload: OrderPaymentEventDTO): String {
-        return try {
+    private fun createPayload(paymentEventPayload: OrderPaymentEventDTO) =
+        try {
             objectMapper!!.writeValueAsString(paymentEventPayload)
         } catch (exception: JsonProcessingException) {
             logger.info(
-                "Could not create OrderPaymentEventPayload for order #${paymentEventPayload.orderId}" +
+                "Couldn't create OrderPaymentEventPayload for order #${paymentEventPayload.orderId}" +
                     "Exception: $exception"
             )
             throw OrderDomainException(
-                "Could not create OrderPaymentEventPayload for order #${paymentEventPayload.orderId}" +
+                "Couldn't create OrderPaymentEventPayload for order #${paymentEventPayload.orderId}" +
                     "Exception: $exception"
             )
         }
-    }
 }

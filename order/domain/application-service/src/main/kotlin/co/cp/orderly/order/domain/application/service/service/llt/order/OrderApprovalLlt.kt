@@ -34,19 +34,19 @@ open class OrderApprovalLlt(
     open fun process(shopApprovalResponse: ShopApprovalResponseDTO) {
         val orderApprovalConsistencyMessageResponse = approvalConsistencyUtil
             .getApprovalConsistencyMessageByLltIdAndLltState(
-                UUID.fromString(shopApprovalResponse.sagaId), LongRunningTransactionState.PROCESSING
+                UUID.fromString(shopApprovalResponse.lltId), LongRunningTransactionState.PROCESSING
             )
         if (orderApprovalConsistencyMessageResponse == null) {
-            logger.info("Consistency message with llt id: ${shopApprovalResponse.sagaId} is already")
+            logger.info("Consistency message with llt id: ${shopApprovalResponse.lltId} is already")
             return
         }
         val order = approveOrder(shopApprovalResponse)
-        val sagaStatus = orderLltUtil.orderStatusToLltStatus(order.orderStatus)
+        val lltStatus = orderLltUtil.orderStatusToLltStatus(order.orderStatus)
         approvalConsistencyUtil.save(
-            getUpdatedApprovalConsistencyMessage(orderApprovalConsistencyMessageResponse, order.orderStatus!!, sagaStatus)
+            getUpdatedApprovalConsistencyMessage(orderApprovalConsistencyMessageResponse, order.orderStatus!!, lltStatus)
         )
         paymentConsistencyUtil.save(
-            getUpdatedPaymentConsistencyMessage(shopApprovalResponse.sagaId, order.orderStatus!!, sagaStatus)
+            getUpdatedPaymentConsistencyMessage(shopApprovalResponse.lltId, order.orderStatus!!, lltStatus)
         )
         logger.info("Order id #${order.getId()?.getValue()} is approved")
     }
@@ -55,24 +55,24 @@ open class OrderApprovalLlt(
     open fun rollback(shopApprovalResponse: ShopApprovalResponseDTO) {
         val orderApprovalConsistencyMessageResponse = approvalConsistencyUtil
             .getApprovalConsistencyMessageByLltIdAndLltState(
-                UUID.fromString(shopApprovalResponse.sagaId), LongRunningTransactionState.PROCESSING
+                UUID.fromString(shopApprovalResponse.lltId), LongRunningTransactionState.PROCESSING
             )
         if (orderApprovalConsistencyMessageResponse == null) {
-            logger.info("Outbox message with saga id ${shopApprovalResponse.sagaId} is already rollbacked!",)
+            logger.info("Consistency message llt  ${shopApprovalResponse.lltId} is already rollbacked",)
             return
         }
         val domainEvent = rollbackOrder(shopApprovalResponse)
-        val sagaStatus = orderLltUtil.orderStatusToLltStatus(domainEvent.order.orderStatus)
+        val lltStatus = orderLltUtil.orderStatusToLltStatus(domainEvent.order.orderStatus)
         approvalConsistencyUtil.save(
             getUpdatedApprovalConsistencyMessage(
-                orderApprovalConsistencyMessageResponse, domainEvent.order.orderStatus!!, sagaStatus
+                orderApprovalConsistencyMessageResponse, domainEvent.order.orderStatus!!, lltStatus
             )
         )
         paymentConsistencyUtil.savePaymentConsistencyMessage(
             orderDataMapper.orderCancelledEventToOrderPaymentEventPayload(domainEvent),
-            domainEvent.order.orderStatus!!, sagaStatus, ConsistencyState.STARTED,
+            domainEvent.order.orderStatus!!, lltStatus, ConsistencyState.STARTED,
             UUID.fromString(
-                shopApprovalResponse.sagaId
+                shopApprovalResponse.lltId
             )
         )
         logger.info("Order id #${domainEvent.order.getId()?.getValue()} is canceling")
@@ -89,29 +89,29 @@ open class OrderApprovalLlt(
     private fun getUpdatedApprovalConsistencyMessage(
         orderApprovalConsistencyMessage: OrderApprovalConsistencyMessage,
         orderStatus: OrderStatus,
-        sagaStatus: LongRunningTransactionState
+        lltStatus: LongRunningTransactionState
     ): OrderApprovalConsistencyMessage {
         orderApprovalConsistencyMessage.processedAt = ZonedDateTime.now(ZoneId.of("UTC"))
         orderApprovalConsistencyMessage.orderStatus = orderStatus
-        orderApprovalConsistencyMessage.lltStatus = sagaStatus
+        orderApprovalConsistencyMessage.lltStatus = lltStatus
         return orderApprovalConsistencyMessage
     }
 
     private fun getUpdatedPaymentConsistencyMessage(
-        sagaId: String,
+        lltId: String,
         orderStatus: OrderStatus,
-        sagaStatus: LongRunningTransactionState
+        lltStatus: LongRunningTransactionState
     ): OrderPaymentConsistencyMessage {
         val orderPaymentConsistencyMessageResponse = paymentConsistencyUtil
-            .getPaymentConsistencyMessageByLltIdAndLltState(UUID.fromString(sagaId), LongRunningTransactionState.PROCESSING)
+            .getPaymentConsistencyMessageByLltIdAndLltState(UUID.fromString(lltId), LongRunningTransactionState.PROCESSING)
         if (orderPaymentConsistencyMessageResponse == null) {
             throw OrderDomainException(
-                "Payment outbox message cannot be found in ${LongRunningTransactionState.PROCESSING.name} state"
+                "Payment consistency message cannot be found in ${LongRunningTransactionState.PROCESSING.name} state"
             )
         }
         orderPaymentConsistencyMessageResponse.processedAt = ZonedDateTime.now(ZoneId.of("UTC"))
         orderPaymentConsistencyMessageResponse.orderStatus = orderStatus
-        orderPaymentConsistencyMessageResponse.lltStatus = sagaStatus
+        orderPaymentConsistencyMessageResponse.lltStatus = lltStatus
         return orderPaymentConsistencyMessageResponse
     }
 

@@ -21,7 +21,7 @@ class ShopApprovalResponseDTOTest {
     @Test
     fun `should construct ShopApprovalResponseDTO and check its data properties`() {
         assertNotNull(shopApprovalResponseDTO.id)
-        assertNotNull(shopApprovalResponseDTO.sagaId)
+        assertNotNull(shopApprovalResponseDTO.lltId)
         assertNotNull(shopApprovalResponseDTO.orderId)
         assertNotNull(shopApprovalResponseDTO.shopId)
         assertNotNull(shopApprovalResponseDTO.createdAt)
@@ -34,7 +34,7 @@ class ShopApprovalResponseDTOTest {
         assertEquals(
             shopApprovalResponseDTO.toString(),
             "ShopApprovalResponseDTO(id=36418fe4-efc1-45c1-a013-51be6af1bb0e, " +
-                "sagaId=2d495872-bcbc-4b62-91c5-1c546397d2a1, " +
+                "lltId=2d495872-bcbc-4b62-91c5-1c546397d2a1, " +
                 "orderId=441c16fd-91de-4089-85c3-2ea388d319db, " +
                 "shopId=9ff9538f-26b5-4602-b847-1e06e970c6a9, " +
                 "createdAt=2023-03-13T13:58:46.085852Z, " +

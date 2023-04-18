@@ -1,5 +1,6 @@
 package co.cp.orderly.order.domain.application.service.consistency.scheduler.payment
 
+import ConsistencyScheduler
 import ConsistencyState
 import co.cp.orderly.infrastructure.transactions.llt.LongRunningTransactionState
 import co.cp.orderly.order.domain.application.service.consistency.model.payment.OrderPaymentConsistencyMessage
@@ -14,7 +15,7 @@ import java.util.logging.Logger
 open class PaymentConsistencyScheduler(
     private val paymentConsistencyHelper: PaymentConsistencyUtil,
     val paymentRequestMessagePublisher: PaymentRequestMessagePublisher
-) {
+) : ConsistencyScheduler {
 
     companion object { private val logger = Logger.getLogger(PaymentConsistencyScheduler::class.java.name) }
 
@@ -23,8 +24,8 @@ open class PaymentConsistencyScheduler(
         fixedDelayString = "\${order-service.consistency-scheduler-fixed-rate}",
         initialDelayString = "\${order-service.consistency-scheduler-initial-delay}"
     )
-    open fun processConsistencyMessage() {
-        val consistencyMessagesResponse: List<OrderPaymentConsistencyMessage>? =
+    override fun processConsistencyMessage() {
+        val consistencyMessagesResponse =
             paymentConsistencyHelper.getPaymentConsistencyMessageByConsistencyStateAndLltState(
                 ConsistencyState.STARTED,
                 LongRunningTransactionState.STARTED,
@@ -49,7 +50,10 @@ open class PaymentConsistencyScheduler(
         }
     }
 
-    private fun updateConsistencyState(orderPaymentConsistencyMessage: OrderPaymentConsistencyMessage, consistencyState: ConsistencyState) {
+    private fun updateConsistencyState(
+        orderPaymentConsistencyMessage: OrderPaymentConsistencyMessage,
+        consistencyState: ConsistencyState
+    ) {
         orderPaymentConsistencyMessage.consistencyState = consistencyState
         paymentConsistencyHelper.save(orderPaymentConsistencyMessage)
         logger.info("OrderPaymentConsistencyMessage is updated with consistency status: ${consistencyState.name}")
