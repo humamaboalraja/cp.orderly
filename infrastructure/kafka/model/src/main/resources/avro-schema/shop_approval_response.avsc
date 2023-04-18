@@ -1,5 +1,5 @@
 {
-    "namespace": "co.cp.orderly.kafka.model.avro",
+    "namespace": "co.cp.orderly.infrastructure.kafka.model.avro",
     "type": "record",
     "name": "ShopApprovalResponseAvroModel",
     "fields": [

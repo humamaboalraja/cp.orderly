@@ -8,7 +8,8 @@ plugins {
     id("kotlin-tests-conventions")
     id("java-conventions")
     id("spring-conventions")
-    id("com.github.davidmc24.gradle.plugin.avro-base") version "1.6.0"
+
+    id("com.github.davidmc24.gradle.plugin.avro") version "1.1.0"
 }
 
 dependencies {
@@ -18,11 +19,12 @@ dependencies {
 avro {
     setEnableDecimalLogicalType(true)
     setStringType(StringType.String)
+    setFieldVisibility("PUBLIC")
 }
 
 val generateAvro = tasks.register<GenerateAvroJavaTask>("generateAvro") {
-    source("src/main/resources/avro-schema")
     setOutputDir(file("src/main/java"))
+    source("src/main/resources/avro-schema")
 }
 
 val generateAvroResolvedDependencies = tasks.register<ResolveAvroDependenciesTask>("resolveAvroDependencies") {
