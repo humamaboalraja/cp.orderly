@@ -7,10 +7,10 @@ plugins {
 
 // Overwriting project default repositories
 repositories {
-    mavenCentral()
     maven {
         url = uri("https://packages.confluent.io/maven")
     }
+    mavenCentral()
 }
 
 dependencies {
@@ -20,9 +20,6 @@ dependencies {
     api(project(":order:domain:core"))
     api(project(":common:domain"))
     implementation("org.springframework.kafka:spring-kafka:$springBootVersion")
-    implementation("io.confluent:kafka-avro-serializer:$kafkaAvroSerializer") {
-        exclude(group = "org.slf4j")
-        exclude(group = "io.swagger")
-    }
+    implementation("io.confluent:kafka-avro-serializer:$kafkaAvroSerializer")
     implementation("org.springframework.boot:spring-boot-starter-validation:$springBootVersion")
 }

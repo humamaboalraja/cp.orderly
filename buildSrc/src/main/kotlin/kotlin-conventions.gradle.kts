@@ -7,40 +7,13 @@ plugins {
     kotlin("plugin.noarg")
 }
 
-allOpen {
-    annotation("javax.enterprise.context.ApplicationScoped")
-    annotation("javax.enterprise.context.RequestScoped")
-    annotation("javax.inject.Singleton")
-    annotation("javax.persistence.Entity")
-    annotation("javax.ws.rs.Path")
-}
-
-
-
-configurations {
-    all {
-        exclude(module = "logback-classic")
-    }
-}
 
 configure<com.diffplug.gradle.spotless.SpotlessExtension> {
-    kotlin {
-        ktlint()
-    }
-    kotlinGradle {
-        ktlint()
-    }
+    kotlin { ktlint() }
+    kotlinGradle { ktlint() }
 }
 
-noArg {
-    annotation("javax.persistence.Entity")
-}
-
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
-}
+java { toolchain { languageVersion.set(JavaLanguageVersion.of(17)) } }
 
 tasks {
     withType<JavaCompile> {

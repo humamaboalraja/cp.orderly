@@ -7,7 +7,6 @@ import cp.cp.orderly.customer.domain.application.service.ports.input.ICustomerAp
 import cp.cp.orderly.customer.domain.application.service.ports.output.messaging.ICustomerMessagePublisher
 import org.springframework.stereotype.Service
 import org.springframework.validation.annotation.Validated
-import java.util.logging.Logger
 
 @Validated
 @Service
@@ -17,8 +16,6 @@ class CustomerApplicationServiceImpl(
     private val createCustomerCommandHandler: CreateCustomerCommandHandler
 
 ) : ICustomerApplicationService {
-
-    companion object { private val logger = Logger.getLogger(CustomerApplicationServiceImpl::class.java.name) }
 
     override fun createCustomer(createCustomerCommand: CreateCustomerCommandDTO): CreateCustomerResponseDTO {
         val customerCreatedEvent = createCustomerCommandHandler.createCustomer(createCustomerCommand)
