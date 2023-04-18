@@ -11,12 +11,13 @@ class CustomerDataLayerDataMapper {
         Customer(
             CustomerId(customerEntity.customerId!!),
             customerEntity.username!!,
+            customerEntity.email!!,
             customerEntity.firstName!!,
             customerEntity.lastName!!
         )
 
     fun customerToCustomerEntity(customer: Customer): CustomerEntity =
         CustomerEntity(
-            customer.getId()?.getValue(), customer.username, customer.firstName, customer.lastName,
+            customer.getId()?.getValue(), customer.username, customer.email, customer.firstName, customer.lastName,
         )
 }
