@@ -1,6 +1,12 @@
 package co.cp.orderly.shop.application.service.ports.output.message.publisher
 
-import co.cp.orderly.domain.event.publisher.DomainEventPublisher
-import co.cp.orderly.shop.domain.core.event.OrderApprovedEvent
+import ConsistencyState
+import co.cp.orderly.shop.application.service.consistency.model.OrderConsistencyMessage
+import java.util.function.BiConsumer
 
-interface OrderApprovedMessagePublisher : DomainEventPublisher<OrderApprovedEvent>
+interface ShopApprovalResponseMessagePublisher {
+    fun publish(
+        orderConsistencyMessage: OrderConsistencyMessage,
+        consistencyCallback: BiConsumer<OrderConsistencyMessage, ConsistencyState>?
+    )
+}
