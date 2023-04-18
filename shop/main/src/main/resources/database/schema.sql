@@ -64,32 +64,32 @@ ALTER TABLE shop.shop_products
         ON DELETE RESTRICT
         NOT VALID;
 
-DROP TYPE IF EXISTS outbox_status;
-CREATE TYPE outbox_status AS ENUM ('STARTED', 'COMPLETED', 'FAILED');
+DROP TYPE IF EXISTS consistency_state;
+CREATE TYPE consistency_state AS ENUM ('STARTED', 'COMPLETED', 'FAILED');
 
-DROP TABLE IF EXISTS shop.order_outbox CASCADE;
+DROP TABLE IF EXISTS shop.order_consistency CASCADE;
 
-CREATE TABLE shop.order_outbox
+CREATE TABLE shop.order_consistency
 (
     id uuid NOT NULL,
-    saga_id uuid NOT NULL,
+    llt_id uuid NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     processed_at TIMESTAMP WITH TIME ZONE,
     type character varying COLLATE pg_catalog."default" NOT NULL,
     payload jsonb NOT NULL,
-    outbox_status outbox_status NOT NULL,
+    consistency_state consistency_state NOT NULL,
     approval_status approval_status NOT NULL,
     version integer NOT NULL,
-    CONSTRAINT order_outbox_pkey PRIMARY KEY (id)
+    CONSTRAINT order_consistency_pkey PRIMARY KEY (id)
 );
 
-CREATE INDEX "shop_order_outbox_saga_status"
-    ON "shop".order_outbox
+CREATE INDEX "shop_order_consistency_llt_status"
+    ON "shop".order_consistency
         (type, approval_status);
 
-CREATE UNIQUE INDEX "shop_order_outbox_saga_id"
-    ON "shop".order_outbox
-        (type, saga_id, approval_status, outbox_status);
+CREATE UNIQUE INDEX "shop_order_consistency_llt_id"
+    ON "shop".order_consistency
+        (type, llt_id, approval_status, consistency_state);
 
 DROP MATERIALIZED VIEW IF EXISTS shop.order_shop_materialized_view;
 

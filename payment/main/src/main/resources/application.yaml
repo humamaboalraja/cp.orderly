@@ -70,3 +70,5 @@ logging:
 payment-service:
   payment-request-topic-name: payment-request
   payment-response-topic-name: payment-response
+  consistency-scheduler-fixed-rate: 10000
+  consistency-scheduler-initial-delay: 10000
