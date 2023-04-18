@@ -12,7 +12,5 @@ class CustomerServiceApp
 fun main(args: Array<String>) {
     try {
         SpringApplication.run(CustomerServiceApp::class.java, *args)
-    } catch (exception: Exception) {
-        throw exception
-    }
+    } catch (exception: Exception) { throw exception }
 }
