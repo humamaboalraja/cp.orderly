@@ -21,10 +21,7 @@ open class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     fun handleException(exception: Exception): ErrorDTO {
         logger.info("${exception.message}, $exception")
-        return ErrorDTO(
-            HttpStatus.INTERNAL_SERVER_ERROR.reasonPhrase,
-            "Unexpected error just occurred!"
-        )
+        return ErrorDTO(HttpStatus.INTERNAL_SERVER_ERROR.reasonPhrase, "500. Something went wrong")
     }
 
     @ResponseBody
