@@ -66,7 +66,10 @@ logging:
 
 order-service:
   kafka-topics:
-    payment-request: payment-request
-    payment-response: payment-response
-    shop-approval-request: shop-approval-request
-    shop-approval-response: shop-approval-response
+    payment-request-topic-name: payment-request
+    payment-response-topic-name: payment-response
+    shop-approval-request-topic-name: shop-approval-request
+    shop-approval-response-topic-name: shop-approval-response
+    customer-topic-name: customer
+  consistency-scheduler-fixed-rate: 10000
+  consistency-scheduler-initial-delay: 10000
