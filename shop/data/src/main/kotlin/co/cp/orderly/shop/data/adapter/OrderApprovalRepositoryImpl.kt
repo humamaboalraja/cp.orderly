@@ -6,10 +6,10 @@ import co.cp.orderly.shop.data.repository.OrderApprovalPersistenceRepository
 import co.cp.orderly.shop.domain.core.entity.OrderApproval
 
 class OrderApprovalRepositoryImpl(
-    val orderApprovalPersistenceRepository: OrderApprovalPersistenceRepository,
-    val shopApplicationServiceDataMapper: ShopDataLayerDataMapper
+    private val orderApprovalPersistenceRepository: OrderApprovalPersistenceRepository,
+    private val shopApplicationServiceDataMapper: ShopDataLayerDataMapper
 ) : IOrderApprovalRepository {
-    override fun save(orderApproval: OrderApproval): OrderApproval =
+    override fun save(orderApproval: OrderApproval) =
         shopApplicationServiceDataMapper.convertOrderApprovalEntityToOrderApproval(
             orderApprovalPersistenceRepository.save(
                 shopApplicationServiceDataMapper.orderApprovalToOrderApprovalEntity(orderApproval)
