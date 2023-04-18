@@ -16,7 +16,7 @@ repositories {
 dependencies {
     api(project(":infrastructure:kafka:config"))
     api(project(":infrastructure:kafka:model"))
-    implementation(project(":infrastructure:transactions:consistency"))
+    api(project(":infrastructure:transactions:consistency"))
     api(project(":order:domain:core"))
     api(project(":common:domain"))
     implementation("org.springframework.kafka:spring-kafka:$springBootVersion")

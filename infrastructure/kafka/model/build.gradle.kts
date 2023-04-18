@@ -6,6 +6,7 @@ val avroVersion: String by project
 
 plugins {
     id("kotlin-tests-conventions")
+    id("java-conventions")
     id("spring-conventions")
     id("com.github.davidmc24.gradle.plugin.avro-base") version "1.6.0"
 }
