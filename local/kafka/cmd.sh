@@ -4,7 +4,7 @@ docker_compose_files=("zk" "kcluster" "create-kafka-topics")
 
 function action() {
   for docker_compose_file in "${docker_compose_files[@]}"; do
-    docker-compose --env-file ../.cp.orderly.env -f network.yml -f "$docker_compose_file".yml "$1" "$2"
+    docker-compose --env-file ./.cp.orderly.env -f network.yml -f "$docker_compose_file".yml "$1" "$2"
   done
 }
 
