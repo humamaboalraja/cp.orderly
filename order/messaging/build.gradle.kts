@@ -1,4 +1,5 @@
 val springBootVersion: String by project
+val avroVersion: String by project
 plugins {
     id("spring-app-module-conventions")
 }
@@ -9,4 +10,5 @@ dependencies {
     api(project(":infrastructure:kafka:model"))
     api(project(":infrastructure:kafka:producer"))
     api(project(":infrastructure:kafka:consumer"))
+    implementation("org.apache.avro:avro:$avroVersion")
 }

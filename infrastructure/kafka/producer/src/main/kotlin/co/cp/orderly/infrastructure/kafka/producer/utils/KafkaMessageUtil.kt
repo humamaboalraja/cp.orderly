@@ -22,14 +22,14 @@ class KafkaMessageUtil(private val objectMapper: ObjectMapper) {
         }
     }
 
-    fun <T, U> getKafkaCallback(
+    fun <T, U> getCallback(
         responseTopicName: String?,
         avroModel: T,
         consistencyMessage: U,
-        consistencyCallback: BiConsumer<U, ConsistencyState?>,
+        consistencyCallback: BiConsumer<U, ConsistencyState>,
         orderId: String?,
         avroModelName: String?
-    ): BiConsumer<SendResult<String?, T>, Throwable?> {
+    ): BiConsumer<SendResult<String, T>, Throwable> {
         return BiConsumer { result, exception ->
             if (exception == null) {
                 val metadata = result.recordMetadata
