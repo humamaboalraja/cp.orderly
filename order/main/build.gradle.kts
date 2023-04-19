@@ -10,5 +10,4 @@ dependencies {
     api(project(":order:messaging"))
     api(project(":common:data"))
     implementation("org.springframework.boot:spring-boot-starter:$springBootVersion")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
 }
