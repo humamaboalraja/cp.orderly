@@ -32,7 +32,7 @@ jobs:
           distribution: 'corretto'
           cache: 'gradle'
       - name: Run tests
-        run: ./gradlew test
+        run: ./gradlew generateAvro && ./gradlew test
   build:
     needs: tests
     name: Build and analyze
@@ -63,5 +63,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew build sonarqube --info
+        run: ./gradlew generateAvro && ./gradlew build sonarqube --info
 
