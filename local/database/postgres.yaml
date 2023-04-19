@@ -1,0 +1,25 @@
+---
+version: '3.8'
+services:
+  postgres-service:
+    image: postgres
+    container_name: orderly-postgres
+    environment:
+      POSTGRES_DB: orderly
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - orderly-network
+    volumes:
+      - database_postgres:/var/lib/postgresql/data
+    restart: always
+
+
+volumes:
+  database_postgres:
+  
+networks:
+  orderly-network:
+    driver: bridge
