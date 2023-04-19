@@ -46,13 +46,7 @@ For more detailes about how the overall system is interacting together, refer to
 
 
 ## 3. Building
-
-### 3.1 Setting up Kafka's cluster
-...
-
-### 3.2 Building from source
-
-### 3.3 Building from source
+For more details about the building process, refer to the [local-development.md](./docs/5.local-development.md)
 
 <br>
 
